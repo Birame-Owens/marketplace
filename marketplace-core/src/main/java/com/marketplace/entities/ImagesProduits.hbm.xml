@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated 12 oct. 2025, 13:05:11 by Hibernate Tools 6.5.1.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="ImagesProduits" optimistic-lock="none" schema="public" table="images_produits">
+        <id name="idImage" type="int">
+            <column name="id_image"/>
+            <generator class="assigned"/>
+        </id>
+        <many-to-one class="Produits" fetch="select" name="produits">
+            <column name="id_produit"/>
+        </many-to-one>
+        <property name="urlImage" type="string">
+            <column length="500" name="url_image" not-null="true"/>
+        </property>
+        <property name="altText" type="string">
+            <column length="255" name="alt_text"/>
+        </property>
+        <property name="ordre" type="java.lang.Integer">
+            <column name="ordre"/>
+        </property>
+        <property name="estPrincipale" type="java.lang.Boolean">
+            <column name="est_principale"/>
+        </property>
+        <property name="dateCreation" type="timestamp">
+            <column length="29" name="date_creation"/>
+        </property>
+    </class>
+</hibernate-mapping>

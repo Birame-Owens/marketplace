@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated 12 oct. 2025, 13:05:11 by Hibernate Tools 6.5.1.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="ParametresSysteme" optimistic-lock="none" schema="public" table="parametres_systeme">
+        <id name="idParametre" type="int">
+            <column name="id_parametre"/>
+            <generator class="assigned"/>
+        </id>
+        <property name="cleParametre" type="string">
+            <column length="100" name="cle_parametre" not-null="true" unique="true"/>
+        </property>
+        <property name="valeurParametre" type="string">
+            <column name="valeur_parametre"/>
+        </property>
+        <property name="typeParametre" type="string">
+            <column length="50" name="type_parametre"/>
+        </property>
+        <property name="description" type="string">
+            <column name="description"/>
+        </property>
+        <property name="dateModification" type="timestamp">
+            <column length="29" name="date_modification"/>
+        </property>
+    </class>
+</hibernate-mapping>

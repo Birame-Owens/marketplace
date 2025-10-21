@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated 12 oct. 2025, 13:05:11 by Hibernate Tools 6.5.1.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="ProduitsListeSouhaits" optimistic-lock="none" schema="public" table="produits_liste_souhaits">
+        <composite-id class="ProduitsListeSouhaitsId" name="id">
+            <key-property name="idListe" type="int">
+                <column name="id_liste"/>
+            </key-property>
+            <key-property name="idProduit" type="int">
+                <column name="id_produit"/>
+            </key-property>
+        </composite-id>
+        <many-to-one class="Produits" fetch="select" insert="false" name="produits" update="false">
+            <column name="id_produit" not-null="true"/>
+        </many-to-one>
+        <many-to-one class="ListesSouhaits" fetch="select" insert="false" name="listesSouhaits" update="false">
+            <column name="id_liste" not-null="true"/>
+        </many-to-one>
+        <property name="dateAjout" type="timestamp">
+            <column length="29" name="date_ajout"/>
+        </property>
+    </class>
+</hibernate-mapping>

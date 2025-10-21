@@ -1,0 +1,953 @@
+-- ============================================
+-- 1. GESTION DES UTILISATEURS ET AUTHENTIFICATION
+-- ============================================
+
+CREATE TABLE roles (
+    id_role SERIAL PRIMARY KEY,
+    nom_role VARCHAR(50) UNIQUE NOT NULL, -- 'ADMIN', 'GERANT', 'CLIENT'
+    description TEXT,
+    date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE utilisateurs (
+    id_utilisateur SERIAL PRIMARY KEY,
+    nom VARCHAR(100) NOT NULL,
+    prenom VARCHAR(100) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    telephone VARCHAR(20),
+    mot_de_passe VARCHAR(255) NOT NULL,
+    id_role INTEGER REFERENCES roles(id_role),
+    photo_profil VARCHAR(500),
+    date_naissance DATE,
+    genre VARCHAR(10),
+    est_actif BOOLEAN DEFAULT TRUE,
+    est_verifie BOOLEAN DEFAULT FALSE,
+    token_verification VARCHAR(255),
+    token_reset_password VARCHAR(255),
+    date_derniere_connexion TIMESTAMP,
+    date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    date_modification TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE adresses (
+    id_adresse SERIAL PRIMARY KEY,
+    id_utilisateur INTEGER REFERENCES utilisateurs(id_utilisateur) ON DELETE CASCADE,
+    type_adresse VARCHAR(50), -- 'livraison', 'facturation', 'principale'
+    nom_complet VARCHAR(200),
+    telephone VARCHAR(20),
+    adresse_ligne1 VARCHAR(255) NOT NULL,
+    adresse_ligne2 VARCHAR(255),
+    ville VARCHAR(100) NOT NULL,
+    code_postal VARCHAR(20) NOT NULL,
+    region VARCHAR(100),
+    pays VARCHAR(100) NOT NULL DEFAULT 'Sénégal',
+    est_par_defaut BOOLEAN DEFAULT FALSE,
+    date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ============================================
+-- 2. GESTION DES BOUTIQUES
+-- ============================================
+
+CREATE TABLE boutiques (
+    id_boutique SERIAL PRIMARY KEY,
+    id_gerant INTEGER REFERENCES utilisateurs(id_utilisateur),
+    nom_boutique VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) UNIQUE NOT NULL,
+    description TEXT,
+    logo VARCHAR(500),
+    banniere VARCHAR(500),
+    email_boutique VARCHAR(255),
+    telephone_boutique VARCHAR(20),
+    adresse_boutique TEXT,
+    ville VARCHAR(100),
+    pays VARCHAR(100) DEFAULT 'Sénégal',
+    
+    -- Informations légales
+    numero_siret VARCHAR(50),
+    numero_tva VARCHAR(50),
+    raison_sociale VARCHAR(255),
+    
+    -- Configuration
+    est_active BOOLEAN DEFAULT TRUE,
+    est_verifiee BOOLEAN DEFAULT FALSE,
+    commission_pourcentage DECIMAL(5,2) DEFAULT 10.00,
+    
+    -- Statistiques
+    note_moyenne DECIMAL(3,2) DEFAULT 0,
+    nombre_avis INTEGER DEFAULT 0,
+    nombre_ventes INTEGER DEFAULT 0,
+    
+    -- Horaires (JSON pour flexibilité)
+    horaires_ouverture JSONB,
+    
+    -- Dates
+    date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    date_modification TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    date_verification TIMESTAMP
+);
+
+CREATE TABLE categories_boutiques (
+    id_categorie_boutique SERIAL PRIMARY KEY,
+    nom_categorie VARCHAR(100) NOT NULL,
+    description TEXT,
+    icone VARCHAR(255),
+    date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE boutique_categories (
+    id_boutique INTEGER REFERENCES boutiques(id_boutique) ON DELETE CASCADE,
+    id_categorie_boutique INTEGER REFERENCES categories_boutiques(id_categorie_boutique),
+    PRIMARY KEY (id_boutique, id_categorie_boutique)
+);
+
+CREATE TABLE documents_boutique (
+    id_document SERIAL PRIMARY KEY,
+    id_boutique INTEGER REFERENCES boutiques(id_boutique) ON DELETE CASCADE,
+    type_document VARCHAR(100), -- 'kbis', 'identite', 'rib', 'attestation'
+    nom_fichier VARCHAR(255),
+    chemin_fichier VARCHAR(500),
+    est_verifie BOOLEAN DEFAULT FALSE,
+    date_upload TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    date_verification TIMESTAMP
+);
+
+-- ============================================
+-- 3. GESTION DES PRODUITS
+-- ============================================
+
+CREATE TABLE marques (
+    id_marque SERIAL PRIMARY KEY,
+    nom_marque VARCHAR(100) UNIQUE NOT NULL,
+    logo VARCHAR(500),
+    description TEXT,
+    site_web VARCHAR(255),
+    est_active BOOLEAN DEFAULT TRUE,
+    date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE categories_produits (
+    id_categorie SERIAL PRIMARY KEY,
+    nom_categorie VARCHAR(100) NOT NULL,
+    slug VARCHAR(100) UNIQUE NOT NULL,
+    description TEXT,
+    id_parent INTEGER REFERENCES categories_produits(id_categorie),
+    image VARCHAR(500),
+    icone VARCHAR(255),
+    ordre INTEGER DEFAULT 0,
+    est_active BOOLEAN DEFAULT TRUE,
+    date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE produits (
+    id_produit SERIAL PRIMARY KEY,
+    id_boutique INTEGER REFERENCES boutiques(id_boutique) ON DELETE CASCADE,
+    id_categorie INTEGER REFERENCES categories_produits(id_categorie),
+    id_marque INTEGER REFERENCES marques(id_marque),
+    
+    -- Informations de base
+    nom_produit VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) NOT NULL,
+    reference_produit VARCHAR(100) UNIQUE,
+    code_barre VARCHAR(100),
+    description_courte TEXT,
+    description_longue TEXT,
+    
+    -- Prix et stock
+    prix_unitaire DECIMAL(10,2) NOT NULL,
+    prix_promo DECIMAL(10,2),
+    date_debut_promo TIMESTAMP,
+    date_fin_promo TIMESTAMP,
+    
+    quantite_stock INTEGER DEFAULT 0,
+    stock_minimum INTEGER DEFAULT 5,
+    stock_maximum INTEGER DEFAULT 1000,
+    
+    -- Dimensions et poids
+    poids DECIMAL(10,2), -- en kg
+    longueur DECIMAL(10,2), -- en cm
+    largeur DECIMAL(10,2),
+    hauteur DECIMAL(10,2),
+    
+    -- SEO
+    meta_titre VARCHAR(255),
+    meta_description TEXT,
+    meta_keywords TEXT,
+    
+    -- Statut
+    est_actif BOOLEAN DEFAULT TRUE,
+    est_en_promo BOOLEAN DEFAULT FALSE,
+    est_nouveau BOOLEAN DEFAULT TRUE,
+    est_en_vedette BOOLEAN DEFAULT FALSE,
+    
+    -- Statistiques
+    nombre_vues INTEGER DEFAULT 0,
+    nombre_ventes INTEGER DEFAULT 0,
+    note_moyenne DECIMAL(3,2) DEFAULT 0,
+    nombre_avis INTEGER DEFAULT 0,
+    
+    -- Dates
+    date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    date_modification TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    UNIQUE(id_boutique, slug)
+);
+
+CREATE TABLE images_produits (
+    id_image SERIAL PRIMARY KEY,
+    id_produit INTEGER REFERENCES produits(id_produit) ON DELETE CASCADE,
+    url_image VARCHAR(500) NOT NULL,
+    alt_text VARCHAR(255),
+    ordre INTEGER DEFAULT 0,
+    est_principale BOOLEAN DEFAULT FALSE,
+    date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE variantes_produits (
+    id_variante SERIAL PRIMARY KEY,
+    id_produit INTEGER REFERENCES produits(id_produit) ON DELETE CASCADE,
+    nom_variante VARCHAR(100) NOT NULL, -- 'Couleur', 'Taille', 'Modèle'
+    valeur_variante VARCHAR(100) NOT NULL, -- 'Rouge', 'XL', 'Pro'
+    reference_variante VARCHAR(100),
+    prix_supplement DECIMAL(10,2) DEFAULT 0,
+    quantite_stock INTEGER DEFAULT 0,
+    image_variante VARCHAR(500),
+    est_active BOOLEAN DEFAULT TRUE,
+    date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE attributs_produits (
+    id_attribut SERIAL PRIMARY KEY,
+    id_produit INTEGER REFERENCES produits(id_produit) ON DELETE CASCADE,
+    nom_attribut VARCHAR(100) NOT NULL, -- 'Matériau', 'Garantie', 'Origine'
+    valeur_attribut TEXT NOT NULL,
+    date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ============================================
+-- 4. GESTION DU PANIER ET DES LISTES
+-- ============================================
+
+CREATE TABLE paniers (
+    id_panier SERIAL PRIMARY KEY,
+    id_utilisateur INTEGER REFERENCES utilisateurs(id_utilisateur) ON DELETE CASCADE,
+    session_id VARCHAR(255), -- Pour les utilisateurs non connectés
+    date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    date_modification TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(id_utilisateur)
+);
+
+CREATE TABLE lignes_panier (
+    id_ligne_panier SERIAL PRIMARY KEY,
+    id_panier INTEGER REFERENCES paniers(id_panier) ON DELETE CASCADE,
+    id_produit INTEGER REFERENCES produits(id_produit),
+    id_variante INTEGER REFERENCES variantes_produits(id_variante),
+    quantite INTEGER NOT NULL DEFAULT 1,
+    prix_unitaire DECIMAL(10,2) NOT NULL,
+    date_ajout TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE listes_souhaits (
+    id_liste SERIAL PRIMARY KEY,
+    id_utilisateur INTEGER REFERENCES utilisateurs(id_utilisateur) ON DELETE CASCADE,
+    nom_liste VARCHAR(100) DEFAULT 'Ma liste',
+    est_publique BOOLEAN DEFAULT FALSE,
+    date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE produits_liste_souhaits (
+    id_liste INTEGER REFERENCES listes_souhaits(id_liste) ON DELETE CASCADE,
+    id_produit INTEGER REFERENCES produits(id_produit) ON DELETE CASCADE,
+    date_ajout TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id_liste, id_produit)
+);
+
+-- ============================================
+-- 5. GESTION DES COMMANDES
+-- ============================================
+
+CREATE TABLE statuts_commande (
+    id_statut SERIAL PRIMARY KEY,
+    nom_statut VARCHAR(50) UNIQUE NOT NULL,
+    -- 'en_attente', 'confirmee', 'en_preparation', 'expediee', 'livree', 'annulee', 'retournee'
+    description TEXT,
+    couleur VARCHAR(20),
+    ordre INTEGER DEFAULT 0
+);
+
+CREATE TABLE commandes (
+    id_commande SERIAL PRIMARY KEY,
+    numero_commande VARCHAR(50) UNIQUE NOT NULL,
+    id_utilisateur INTEGER REFERENCES utilisateurs(id_utilisateur),
+    id_statut INTEGER REFERENCES statuts_commande(id_statut),
+    
+    -- Montants
+    montant_produits DECIMAL(10,2) NOT NULL,
+    montant_livraison DECIMAL(10,2) DEFAULT 0,
+    montant_remise DECIMAL(10,2) DEFAULT 0,
+    montant_taxes DECIMAL(10,2) DEFAULT 0,
+    montant_total DECIMAL(10,2) NOT NULL,
+    
+    -- Adresses
+    id_adresse_livraison INTEGER REFERENCES adresses(id_adresse),
+    id_adresse_facturation INTEGER REFERENCES adresses(id_adresse),
+    
+    -- Informations client (copie pour historique)
+    nom_client VARCHAR(200),
+    email_client VARCHAR(255),
+    telephone_client VARCHAR(20),
+    
+    -- Livraison
+    mode_livraison VARCHAR(100),
+    frais_livraison DECIMAL(10,2) DEFAULT 0,
+    date_livraison_estimee DATE,
+    date_livraison_reelle TIMESTAMP,
+    numero_tracking VARCHAR(100),
+    
+    -- Notes
+    note_client TEXT,
+    note_admin TEXT,
+    
+    -- Dates
+    date_commande TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    date_modification TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE lignes_commande (
+    id_ligne_commande SERIAL PRIMARY KEY,
+    id_commande INTEGER REFERENCES commandes(id_commande) ON DELETE CASCADE,
+    id_produit INTEGER REFERENCES produits(id_produit),
+    id_variante INTEGER REFERENCES variantes_produits(id_variante),
+    id_boutique INTEGER REFERENCES boutiques(id_boutique),
+    
+    nom_produit VARCHAR(255) NOT NULL,
+    reference_produit VARCHAR(100),
+    quantite INTEGER NOT NULL,
+    prix_unitaire DECIMAL(10,2) NOT NULL,
+    prix_total DECIMAL(10,2) NOT NULL,
+    
+    taux_commission DECIMAL(5,2),
+    montant_commission DECIMAL(10,2),
+    
+    date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE historique_commandes (
+    id_historique SERIAL PRIMARY KEY,
+    id_commande INTEGER REFERENCES commandes(id_commande) ON DELETE CASCADE,
+    id_statut INTEGER REFERENCES statuts_commande(id_statut),
+    commentaire TEXT,
+    id_utilisateur INTEGER REFERENCES utilisateurs(id_utilisateur),
+    date_changement TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ============================================
+-- 6. GESTION DES PAIEMENTS
+-- ============================================
+
+CREATE TABLE methodes_paiement (
+    id_methode SERIAL PRIMARY KEY,
+    nom_methode VARCHAR(100) NOT NULL,
+    -- 'carte_bancaire', 'paypal', 'virement', 'mobile_money', 'especes'
+    code_methode VARCHAR(50) UNIQUE NOT NULL,
+    icone VARCHAR(255),
+    est_active BOOLEAN DEFAULT TRUE,
+    frais_fixe DECIMAL(10,2) DEFAULT 0,
+    frais_pourcentage DECIMAL(5,2) DEFAULT 0,
+    date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE paiements (
+    id_paiement SERIAL PRIMARY KEY,
+    id_commande INTEGER REFERENCES commandes(id_commande),
+    id_methode INTEGER REFERENCES methodes_paiement(id_methode),
+    
+    numero_transaction VARCHAR(255) UNIQUE,
+    montant DECIMAL(10,2) NOT NULL,
+    devise VARCHAR(10) DEFAULT 'XOF',
+    
+    statut_paiement VARCHAR(50) NOT NULL,
+    -- 'en_attente', 'valide', 'refuse', 'rembourse', 'annule'
+    
+    -- Informations de paiement (JSON pour flexibilité)
+    donnees_paiement JSONB,
+    
+    -- Pour les paiements par carte
+    dernier_chiffres_carte VARCHAR(4),
+    type_carte VARCHAR(50),
+    
+    -- Dates
+    date_paiement TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    date_validation TIMESTAMP,
+    
+    -- Notes
+    message_erreur TEXT,
+    note TEXT
+);
+
+CREATE TABLE remboursements (
+    id_remboursement SERIAL PRIMARY KEY,
+    id_paiement INTEGER REFERENCES paiements(id_paiement),
+    id_commande INTEGER REFERENCES commandes(id_commande),
+    
+    montant_rembourse DECIMAL(10,2) NOT NULL,
+    raison_remboursement TEXT,
+    statut_remboursement VARCHAR(50),
+    -- 'demande', 'en_cours', 'valide', 'refuse'
+    
+    numero_transaction_remboursement VARCHAR(255),
+    
+    id_utilisateur_demande INTEGER REFERENCES utilisateurs(id_utilisateur),
+    id_utilisateur_validation INTEGER REFERENCES utilisateurs(id_utilisateur),
+    
+    date_demande TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    date_validation TIMESTAMP
+);
+
+-- ============================================
+-- 7. GESTION DES FACTURES
+-- ============================================
+
+CREATE TABLE factures (
+    id_facture SERIAL PRIMARY KEY,
+    numero_facture VARCHAR(50) UNIQUE NOT NULL,
+    id_commande INTEGER REFERENCES commandes(id_commande),
+    id_boutique INTEGER REFERENCES boutiques(id_boutique),
+    id_utilisateur INTEGER REFERENCES utilisateurs(id_utilisateur),
+    
+    -- Montants
+    montant_ht DECIMAL(10,2) NOT NULL,
+    montant_tva DECIMAL(10,2) DEFAULT 0,
+    montant_ttc DECIMAL(10,2) NOT NULL,
+    
+    taux_tva DECIMAL(5,2) DEFAULT 18.00,
+    
+    -- Informations client (copie)
+    nom_client VARCHAR(200),
+    adresse_facturation TEXT,
+    email_client VARCHAR(255),
+    
+    -- Informations boutique (copie)
+    nom_boutique VARCHAR(255),
+    adresse_boutique TEXT,
+    siret_boutique VARCHAR(50),
+    
+    -- Fichier PDF
+    chemin_pdf VARCHAR(500),
+    
+    -- Dates
+    date_emission DATE NOT NULL,
+    date_echeance DATE,
+    date_paiement DATE,
+    
+    statut_facture VARCHAR(50) DEFAULT 'emise',
+    -- 'emise', 'payee', 'annulee'
+    
+    date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE avoir_factures (
+    id_avoir SERIAL PRIMARY KEY,
+    numero_avoir VARCHAR(50) UNIQUE NOT NULL,
+    id_facture INTEGER REFERENCES factures(id_facture),
+    
+    montant_avoir DECIMAL(10,2) NOT NULL,
+    raison_avoir TEXT,
+    
+    chemin_pdf VARCHAR(500),
+    
+    date_emission DATE NOT NULL,
+    date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ============================================
+-- 8. GESTION DES AVIS ET NOTATIONS
+-- ============================================
+
+CREATE TABLE avis_produits (
+    id_avis SERIAL PRIMARY KEY,
+    id_produit INTEGER REFERENCES produits(id_produit) ON DELETE CASCADE,
+    id_utilisateur INTEGER REFERENCES utilisateurs(id_utilisateur),
+    id_commande INTEGER REFERENCES commandes(id_commande),
+    
+    note INTEGER NOT NULL CHECK (note BETWEEN 1 AND 5),
+    titre VARCHAR(255),
+    commentaire TEXT,
+    
+    -- Modération
+    est_verifie BOOLEAN DEFAULT FALSE,
+    est_signale BOOLEAN DEFAULT FALSE,
+    est_publie BOOLEAN DEFAULT TRUE,
+    
+    -- Réponse du vendeur
+    reponse_vendeur TEXT,
+    date_reponse TIMESTAMP,
+    
+    -- Utilité
+    nombre_votes_utile INTEGER DEFAULT 0,
+    nombre_votes_inutile INTEGER DEFAULT 0,
+    
+    date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    date_modification TIMESTAMP
+);
+
+CREATE TABLE images_avis (
+    id_image_avis SERIAL PRIMARY KEY,
+    id_avis INTEGER REFERENCES avis_produits(id_avis) ON DELETE CASCADE,
+    url_image VARCHAR(500) NOT NULL,
+    date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE avis_boutiques (
+    id_avis_boutique SERIAL PRIMARY KEY,
+    id_boutique INTEGER REFERENCES boutiques(id_boutique) ON DELETE CASCADE,
+    id_utilisateur INTEGER REFERENCES utilisateurs(id_utilisateur),
+    id_commande INTEGER REFERENCES commandes(id_commande),
+    
+    note_produits INTEGER CHECK (note_produits BETWEEN 1 AND 5),
+    note_communication INTEGER CHECK (note_communication BETWEEN 1 AND 5),
+    note_livraison INTEGER CHECK (note_livraison BETWEEN 1 AND 5),
+    note_globale DECIMAL(3,2),
+    
+    commentaire TEXT,
+    
+    est_verifie BOOLEAN DEFAULT FALSE,
+    est_publie BOOLEAN DEFAULT TRUE,
+    
+    date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ============================================
+-- 9. GESTION DES PROMOTIONS ET COUPONS
+-- ============================================
+
+CREATE TABLE coupons (
+    id_coupon SERIAL PRIMARY KEY,
+    code_coupon VARCHAR(50) UNIQUE NOT NULL,
+    id_boutique INTEGER REFERENCES boutiques(id_boutique), -- NULL = admin
+    
+    type_reduction VARCHAR(20) NOT NULL,
+    -- 'pourcentage', 'montant_fixe', 'livraison_gratuite'
+    
+    valeur_reduction DECIMAL(10,2) NOT NULL,
+    montant_minimum DECIMAL(10,2),
+    montant_maximum_reduction DECIMAL(10,2),
+    
+    nombre_utilisations_max INTEGER,
+    nombre_utilisations_actuel INTEGER DEFAULT 0,
+    nombre_utilisations_par_client INTEGER DEFAULT 1,
+    
+    est_actif BOOLEAN DEFAULT TRUE,
+    est_public BOOLEAN DEFAULT TRUE,
+    
+    date_debut TIMESTAMP NOT NULL,
+    date_fin TIMESTAMP NOT NULL,
+    
+    date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE utilisations_coupons (
+    id_utilisation SERIAL PRIMARY KEY,
+    id_coupon INTEGER REFERENCES coupons(id_coupon),
+    id_commande INTEGER REFERENCES commandes(id_commande),
+    id_utilisateur INTEGER REFERENCES utilisateurs(id_utilisateur),
+    montant_reduction DECIMAL(10,2),
+    date_utilisation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE promotions (
+    id_promotion SERIAL PRIMARY KEY,
+    id_boutique INTEGER REFERENCES boutiques(id_boutique),
+    nom_promotion VARCHAR(255) NOT NULL,
+    description TEXT,
+    
+    type_promotion VARCHAR(50),
+    -- 'flash_sale', 'happy_hour', 'clearance', 'bundle'
+    
+    pourcentage_reduction DECIMAL(5,2),
+    
+    est_active BOOLEAN DEFAULT TRUE,
+    
+    date_debut TIMESTAMP NOT NULL,
+    date_fin TIMESTAMP NOT NULL,
+    
+    date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE produits_promotion (
+    id_promotion INTEGER REFERENCES promotions(id_promotion) ON DELETE CASCADE,
+    id_produit INTEGER REFERENCES produits(id_produit) ON DELETE CASCADE,
+    prix_promo DECIMAL(10,2),
+    PRIMARY KEY (id_promotion, id_produit)
+);
+
+-- ============================================
+-- 10. GESTION DES NOTIFICATIONS
+-- ============================================
+
+CREATE TABLE notifications (
+    id_notification SERIAL PRIMARY KEY,
+    id_utilisateur INTEGER REFERENCES utilisateurs(id_utilisateur) ON DELETE CASCADE,
+    
+    type_notification VARCHAR(100) NOT NULL,
+    -- 'commande', 'paiement', 'livraison', 'promotion', 'message', 'avis'
+    
+    titre VARCHAR(255) NOT NULL,
+    message TEXT NOT NULL,
+    lien VARCHAR(500),
+    
+    est_lu BOOLEAN DEFAULT FALSE,
+    est_archive BOOLEAN DEFAULT FALSE,
+    
+    date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    date_lecture TIMESTAMP
+);
+
+CREATE TABLE preferences_notifications (
+    id_preference SERIAL PRIMARY KEY,
+    id_utilisateur INTEGER REFERENCES utilisateurs(id_utilisateur) ON DELETE CASCADE,
+    
+    notif_email_commande BOOLEAN DEFAULT TRUE,
+    notif_email_promotion BOOLEAN DEFAULT TRUE,
+    notif_email_newsletter BOOLEAN DEFAULT FALSE,
+    
+    notif_push_commande BOOLEAN DEFAULT TRUE,
+    notif_push_livraison BOOLEAN DEFAULT TRUE,
+    notif_push_promotion BOOLEAN DEFAULT FALSE,
+    
+    date_modification TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    UNIQUE(id_utilisateur)
+);
+
+-- ============================================
+-- 11. GESTION DES MESSAGES ET SUPPORT
+-- ============================================
+
+CREATE TABLE conversations (
+    id_conversation SERIAL PRIMARY KEY,
+    id_client INTEGER REFERENCES utilisateurs(id_utilisateur),
+    id_boutique INTEGER REFERENCES boutiques(id_boutique),
+    id_commande INTEGER REFERENCES commandes(id_commande),
+    
+    sujet VARCHAR(255),
+    statut_conversation VARCHAR(50) DEFAULT 'ouverte',
+    -- 'ouverte', 'en_cours', 'resolue', 'fermee'
+    
+    date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    date_derniere_activite TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE messages (
+    id_message SERIAL PRIMARY KEY,
+    id_conversation INTEGER REFERENCES conversations(id_conversation) ON DELETE CASCADE,
+    id_expediteur INTEGER REFERENCES utilisateurs(id_utilisateur),
+    
+    contenu TEXT NOT NULL,
+    
+    est_lu BOOLEAN DEFAULT FALSE,
+    date_lecture TIMESTAMP,
+    
+    date_envoi TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE pieces_jointes_messages (
+    id_piece_jointe SERIAL PRIMARY KEY,
+    id_message INTEGER REFERENCES messages(id_message) ON DELETE CASCADE,
+    nom_fichier VARCHAR(255),
+    chemin_fichier VARCHAR(500),
+    type_fichier VARCHAR(100),
+    taille_fichier INTEGER,
+    date_upload TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ============================================
+-- 12. GESTION DES STATISTIQUES ET RAPPORTS
+-- ============================================
+
+CREATE TABLE statistiques_boutiques (
+    id_statistique SERIAL PRIMARY KEY,
+    id_boutique INTEGER REFERENCES boutiques(id_boutique) ON DELETE CASCADE,
+    
+    date_statistique DATE NOT NULL,
+    
+    -- Ventes
+    nombre_commandes INTEGER DEFAULT 0,
+    chiffre_affaires DECIMAL(10,2) DEFAULT 0,
+    montant_commissions DECIMAL(10,2) DEFAULT 0,
+    
+    -- Produits
+    nombre_produits_vendus INTEGER DEFAULT 0,
+    nombre_vues_produits INTEGER DEFAULT 0,
+    
+    -- Clients
+    nombre_nouveaux_clients INTEGER DEFAULT 0,
+    nombre_clients_recurrents INTEGER DEFAULT 0,
+    
+    -- Taux
+    taux_conversion DECIMAL(5,2) DEFAULT 0,
+    panier_moyen DECIMAL(10,2) DEFAULT 0,
+    
+    date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    UNIQUE(id_boutique, date_statistique)
+);
+
+CREATE TABLE statistiques_produits (
+    id_statistique_produit SERIAL PRIMARY KEY,
+    id_produit INTEGER REFERENCES produits(id_produit) ON DELETE CASCADE,
+    
+    date_statistique DATE NOT NULL,
+    
+    nombre_vues INTEGER DEFAULT 0,
+    nombre_ajouts_panier INTEGER DEFAULT 0,
+    nombre_ventes INTEGER DEFAULT 0,
+    
+    taux_conversion DECIMAL(5,2) DEFAULT 0,
+    
+    date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    UNIQUE(id_produit, date_statistique)
+);
+
+CREATE TABLE logs_activites (
+    id_log SERIAL PRIMARY KEY,
+    id_utilisateur INTEGER REFERENCES utilisateurs(id_utilisateur),
+    
+    type_action VARCHAR(100) NOT NULL,
+    -- 'connexion', 'creation', 'modification', 'suppression', 'achat'
+    
+    entite_cible VARCHAR(100),
+    -- 'produit', 'commande', 'utilisateur', 'boutique'
+    
+    id_entite INTEGER,
+    
+    description TEXT,
+    adresse_ip VARCHAR(50),
+    user_agent TEXT,
+    
+    date_action TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ============================================
+-- 13. GESTION DES PARAMÈTRES SYSTÈME
+-- ============================================
+
+CREATE TABLE parametres_systeme (
+    id_parametre SERIAL PRIMARY KEY,
+    cle_parametre VARCHAR(100) UNIQUE NOT NULL,
+    valeur_parametre TEXT,
+    type_parametre VARCHAR(50),
+    -- 'string', 'integer', 'boolean', 'json'
+    description TEXT,
+    date_modification TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE configurations_boutique (
+    id_configuration SERIAL PRIMARY KEY,
+    id_boutique INTEGER REFERENCES boutiques(id_boutique) ON DELETE CASCADE,
+    
+    -- Paramètres de livraison
+    livraison_gratuite_au_dessus DECIMAL(10,2),
+    delai_preparation_jours INTEGER DEFAULT 2,
+    
+    -- Paramètres de retour
+    retour_autorise BOOLEAN DEFAULT TRUE,
+    delai_retour_jours INTEGER DEFAULT 14,
+    
+    -- Paramètres de paiement
+    modes_paiement_acceptes JSONB,
+    
+    -- Paramètres de notification
+    email_notification VARCHAR(255),
+    telephone_notification VARCHAR(20),
+    
+    date_modification TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    UNIQUE(id_boutique)
+);
+
+CREATE TABLE bannières_publicitaires (
+    id_banniere SERIAL PRIMARY KEY,
+    titre VARCHAR(255),
+    description TEXT,
+    image_banniere VARCHAR(500),
+    lien_cible VARCHAR(500),
+    
+    position VARCHAR(50),
+    -- 'home_top', 'home_middle', 'sidebar', 'footer'
+    
+    ordre INTEGER DEFAULT 0,
+    
+    est_active BOOLEAN DEFAULT TRUE,
+    
+    date_debut TIMESTAMP,
+    date_fin TIMESTAMP,
+    
+    nombre_clics INTEGER DEFAULT 0,
+    nombre_vues INTEGER DEFAULT 0,
+    
+    date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ============================================
+-- 14. INDEX POUR OPTIMISATION
+-- ============================================
+
+-- Index pour utilisateurs
+CREATE INDEX idx_utilisateurs_email ON utilisateurs(email);
+CREATE INDEX idx_utilisateurs_role ON utilisateurs(id_role);
+CREATE INDEX idx_utilisateurs_actif ON utilisateurs(est_actif);
+
+-- Index pour boutiques
+CREATE INDEX idx_boutiques_gerant ON boutiques(id_gerant);
+CREATE INDEX idx_boutiques_active ON boutiques(est_active);
+CREATE INDEX idx_boutiques_slug ON boutiques(slug);
+
+-- Index pour produits
+CREATE INDEX idx_produits_boutique ON produits(id_boutique);
+CREATE INDEX idx_produits_categorie ON produits(id_categorie);
+CREATE INDEX idx_produits_marque ON produits(id_marque);
+CREATE INDEX idx_produits_actif ON produits(est_actif);
+CREATE INDEX idx_produits_slug ON produits(slug);
+CREATE INDEX idx_produits_reference ON produits(reference_produit);
+
+-- Index pour commandes
+CREATE INDEX idx_commandes_utilisateur ON commandes(id_utilisateur);
+CREATE INDEX idx_commandes_statut ON commandes(id_statut);
+CREATE INDEX idx_commandes_numero ON commandes(numero_commande);
+CREATE INDEX idx_commandes_date ON commandes(date_commande);
+
+-- Index pour lignes_commande
+CREATE INDEX idx_lignes_commande_boutique ON lignes_commande(id_boutique);
+CREATE INDEX idx_lignes_commande_produit ON lignes_commande(id_produit);
+
+-- Index pour paiements
+CREATE INDEX idx_paiements_commande ON paiements(id_commande);
+CREATE INDEX idx_paiements_statut ON paiements(statut_paiement);
+CREATE INDEX idx_paiements_transaction ON paiements(numero_transaction);
+
+-- Index pour statistiques
+CREATE INDEX idx_stats_boutiques_date ON statistiques_boutiques(date_statistique);
+CREATE INDEX idx_stats_produits_date ON statistiques_produits(date_statistique);
+
+-- Index pour recherche full-text
+CREATE INDEX idx_produits_search ON produits USING gin(to_tsvector('french', nom_produit || ' ' || COALESCE(description_courte, '')));
+CREATE INDEX idx_boutiques_search ON boutiques USING gin(to_tsvector('french', nom_boutique || ' ' || COALESCE(description, '')));
+
+-- ============================================
+-- 15. TRIGGERS POUR AUTOMATISATION
+-- ============================================
+
+-- Trigger pour mettre à jour date_modification
+CREATE OR REPLACE FUNCTION update_modified_column()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.date_modification = CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER update_utilisateurs_modtime
+    BEFORE UPDATE ON utilisateurs
+    FOR EACH ROW
+    EXECUTE FUNCTION update_modified_column();
+
+CREATE TRIGGER update_boutiques_modtime
+    BEFORE UPDATE ON boutiques
+    FOR EACH ROW
+    EXECUTE FUNCTION update_modified_column();
+
+CREATE TRIGGER update_produits_modtime
+    BEFORE UPDATE ON produits
+    FOR EACH ROW
+    EXECUTE FUNCTION update_modified_column();
+
+-- Trigger pour mettre à jour stock après commande
+CREATE OR REPLACE FUNCTION update_stock_after_order()
+RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE produits 
+    SET quantite_stock = quantite_stock - NEW.quantite
+    WHERE id_produit = NEW.id_produit;
+    
+    IF NEW.id_variante IS NOT NULL THEN
+        UPDATE variantes_produits
+        SET quantite_stock = quantite_stock - NEW.quantite
+        WHERE id_variante = NEW.id_variante;
+    END IF;
+    
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_update_stock
+    AFTER INSERT ON lignes_commande
+    FOR EACH ROW
+    EXECUTE FUNCTION update_stock_after_order();
+
+-- Trigger pour calculer note moyenne produit
+CREATE OR REPLACE FUNCTION update_note_moyenne_produit()
+RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE produits
+    SET note_moyenne = (
+        SELECT AVG(note)::DECIMAL(3,2)
+        FROM avis_produits
+        WHERE id_produit = NEW.id_produit
+        AND est_publie = TRUE
+    ),
+    nombre_avis = (
+        SELECT COUNT(*)
+        FROM avis_produits
+        WHERE id_produit = NEW.id_produit
+        AND est_publie = TRUE
+    )
+    WHERE id_produit = NEW.id_produit;
+    
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_update_note_produit
+    AFTER INSERT OR UPDATE ON avis_produits
+    FOR EACH ROW
+    EXECUTE FUNCTION update_note_moyenne_produit();
+
+-- ============================================
+-- 16. DONNÉES INITIALES
+-- ============================================
+
+-- Insertion des rôles
+INSERT INTO roles (nom_role, description) VALUES
+('ADMIN', 'Administrateur du système'),
+('GERANT', 'Gérant de boutique'),
+('CLIENT', 'Client acheteur');
+
+-- Insertion des statuts de commande
+INSERT INTO statuts_commande (nom_statut, description, couleur, ordre) VALUES
+('en_attente', 'Commande en attente de confirmation', '#FFA500', 1),
+('confirmee', 'Commande confirmée', '#4CAF50', 2),
+('en_preparation', 'Commande en cours de préparation', '#2196F3', 3),
+('expediee', 'Commande expédiée', '#9C27B0', 4),
+('livree', 'Commande livrée', '#4CAF50', 5),
+('annulee', 'Commande annulée', '#F44336', 6),
+('retournee', 'Commande retournée', '#FF9800', 7);
+
+-- Insertion des méthodes de paiement
+INSERT INTO methodes_paiement (nom_methode, code_methode, est_active) VALUES
+('Carte Bancaire', 'carte_bancaire', TRUE),
+('PayPal', 'paypal', TRUE),
+('Mobile Money', 'mobile_money', TRUE),
+('Virement Bancaire', 'virement', TRUE),
+('Paiement à la livraison', 'cash_delivery', TRUE);
+
+-- Paramètres système par défaut
+INSERT INTO parametres_systeme (cle_parametre, valeur_parametre, type_parametre, description) VALUES
+('taux_tva', '18', 'integer', 'Taux de TVA en pourcentage'),
+('commission_plateforme', '10', 'integer', 'Commission de la plateforme en pourcentage'),
+('devise', 'XOF', 'string', 'Devise par défaut'),
+('email_contact', 'contact@marketplace.com', 'string', 'Email de contact'),
+('delai_annulation_commande', '24', 'integer', 'Délai d''annulation en heures'),
+('montant_livraison_gratuite', '50000', 'integer', 'Montant pour livraison gratuite'),
+('frais_livraison_standard', '2500', 'integer', 'Frais de livraison standard');

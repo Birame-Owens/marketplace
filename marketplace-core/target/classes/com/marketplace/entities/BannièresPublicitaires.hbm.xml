@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated 12 oct. 2025, 13:05:11 by Hibernate Tools 6.5.1.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="BannièresPublicitaires" optimistic-lock="none" schema="public" table="bannières_publicitaires">
+        <id name="idBanniere" type="int">
+            <column name="id_banniere"/>
+            <generator class="assigned"/>
+        </id>
+        <property name="titre" type="string">
+            <column length="255" name="titre"/>
+        </property>
+        <property name="description" type="string">
+            <column name="description"/>
+        </property>
+        <property name="imageBanniere" type="string">
+            <column length="500" name="image_banniere"/>
+        </property>
+        <property name="lienCible" type="string">
+            <column length="500" name="lien_cible"/>
+        </property>
+        <property name="position" type="string">
+            <column length="50" name="position"/>
+        </property>
+        <property name="ordre" type="java.lang.Integer">
+            <column name="ordre"/>
+        </property>
+        <property name="estActive" type="java.lang.Boolean">
+            <column name="est_active"/>
+        </property>
+        <property name="dateDebut" type="timestamp">
+            <column length="29" name="date_debut"/>
+        </property>
+        <property name="dateFin" type="timestamp">
+            <column length="29" name="date_fin"/>
+        </property>
+        <property name="nombreClics" type="java.lang.Integer">
+            <column name="nombre_clics"/>
+        </property>
+        <property name="nombreVues" type="java.lang.Integer">
+            <column name="nombre_vues"/>
+        </property>
+        <property name="dateCreation" type="timestamp">
+            <column length="29" name="date_creation"/>
+        </property>
+    </class>
+</hibernate-mapping>

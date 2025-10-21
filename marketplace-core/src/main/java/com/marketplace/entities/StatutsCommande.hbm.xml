@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated 12 oct. 2025, 13:05:11 by Hibernate Tools 6.5.1.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="StatutsCommande" optimistic-lock="none" schema="public" table="statuts_commande">
+        <id name="idStatut" type="int">
+            <column name="id_statut"/>
+            <generator class="assigned"/>
+        </id>
+        <property name="nomStatut" type="string">
+            <column length="50" name="nom_statut" not-null="true" unique="true"/>
+        </property>
+        <property name="description" type="string">
+            <column name="description"/>
+        </property>
+        <property name="couleur" type="string">
+            <column length="20" name="couleur"/>
+        </property>
+        <property name="ordre" type="java.lang.Integer">
+            <column name="ordre"/>
+        </property>
+        <set fetch="select" inverse="true" lazy="true" name="historiqueCommandeses" table="historique_commandes">
+            <key>
+                <column name="id_statut"/>
+            </key>
+            <one-to-many class="HistoriqueCommandes"/>
+        </set>
+        <set fetch="select" inverse="true" lazy="true" name="commandeses" table="commandes">
+            <key>
+                <column name="id_statut"/>
+            </key>
+            <one-to-many class="Commandes"/>
+        </set>
+    </class>
+</hibernate-mapping>

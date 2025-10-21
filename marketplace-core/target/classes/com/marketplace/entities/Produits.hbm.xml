@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated 12 oct. 2025, 13:05:11 by Hibernate Tools 6.5.1.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="Produits" optimistic-lock="none" schema="public" table="produits">
+        <id name="idProduit" type="int">
+            <column name="id_produit"/>
+            <generator class="assigned"/>
+        </id>
+        <many-to-one class="Marques" fetch="select" name="marques">
+            <column name="id_marque"/>
+        </many-to-one>
+        <many-to-one class="Boutiques" fetch="select" name="boutiques">
+            <column name="id_boutique"/>
+        </many-to-one>
+        <many-to-one class="CategoriesProduits" fetch="select" name="categoriesProduits">
+            <column name="id_categorie"/>
+        </many-to-one>
+        <property name="nomProduit" type="string">
+            <column length="255" name="nom_produit" not-null="true"/>
+        </property>
+        <property name="slug" type="string">
+            <column length="255" name="slug" not-null="true"/>
+        </property>
+        <property name="referenceProduit" type="string">
+            <column length="100" name="reference_produit" unique="true"/>
+        </property>
+        <property name="codeBarre" type="string">
+            <column length="100" name="code_barre"/>
+        </property>
+        <property name="descriptionCourte" type="string">
+            <column name="description_courte"/>
+        </property>
+        <property name="descriptionLongue" type="string">
+            <column name="description_longue"/>
+        </property>
+        <property name="prixUnitaire" type="big_decimal">
+            <column name="prix_unitaire" not-null="true" precision="10" scale="2"/>
+        </property>
+        <property name="prixPromo" type="big_decimal">
+            <column name="prix_promo" precision="10" scale="2"/>
+        </property>
+        <property name="dateDebutPromo" type="timestamp">
+            <column length="29" name="date_debut_promo"/>
+        </property>
+        <property name="dateFinPromo" type="timestamp">
+            <column length="29" name="date_fin_promo"/>
+        </property>
+        <property name="quantiteStock" type="java.lang.Integer">
+            <column name="quantite_stock"/>
+        </property>
+        <property name="stockMinimum" type="java.lang.Integer">
+            <column name="stock_minimum"/>
+        </property>
+        <property name="stockMaximum" type="java.lang.Integer">
+            <column name="stock_maximum"/>
+        </property>
+        <property name="poids" type="big_decimal">
+            <column name="poids" precision="10" scale="2"/>
+        </property>
+        <property name="longueur" type="big_decimal">
+            <column name="longueur" precision="10" scale="2"/>
+        </property>
+        <property name="largeur" type="big_decimal">
+            <column name="largeur" precision="10" scale="2"/>
+        </property>
+        <property name="hauteur" type="big_decimal">
+            <column name="hauteur" precision="10" scale="2"/>
+        </property>
+        <property name="metaTitre" type="string">
+            <column length="255" name="meta_titre"/>
+        </property>
+        <property name="metaDescription" type="string">
+            <column name="meta_description"/>
+        </property>
+        <property name="metaKeywords" type="string">
+            <column name="meta_keywords"/>
+        </property>
+        <property name="estActif" type="java.lang.Boolean">
+            <column name="est_actif"/>
+        </property>
+        <property name="estEnPromo" type="java.lang.Boolean">
+            <column name="est_en_promo"/>
+        </property>
+        <property name="estNouveau" type="java.lang.Boolean">
+            <column name="est_nouveau"/>
+        </property>
+        <property name="estEnVedette" type="java.lang.Boolean">
+            <column name="est_en_vedette"/>
+        </property>
+        <property name="nombreVues" type="java.lang.Integer">
+            <column name="nombre_vues"/>
+        </property>
+        <property name="nombreVentes" type="java.lang.Integer">
+            <column name="nombre_ventes"/>
+        </property>
+        <property name="noteMoyenne" type="big_decimal">
+            <column name="note_moyenne" precision="3" scale="2"/>
+        </property>
+        <property name="nombreAvis" type="java.lang.Integer">
+            <column name="nombre_avis"/>
+        </property>
+        <property name="dateCreation" type="timestamp">
+            <column length="29" name="date_creation"/>
+        </property>
+        <property name="dateModification" type="timestamp">
+            <column length="29" name="date_modification"/>
+        </property>
+        <set fetch="select" inverse="true" lazy="true" name="imagesProduitses" table="images_produits">
+            <key>
+                <column name="id_produit"/>
+            </key>
+            <one-to-many class="ImagesProduits"/>
+        </set>
+        <set fetch="select" inverse="true" lazy="true" name="lignesPaniers" table="lignes_panier">
+            <key>
+                <column name="id_produit"/>
+            </key>
+            <one-to-many class="LignesPanier"/>
+        </set>
+        <set fetch="select" inverse="true" lazy="true" name="attributsProduitses" table="attributs_produits">
+            <key>
+                <column name="id_produit"/>
+            </key>
+            <one-to-many class="AttributsProduits"/>
+        </set>
+        <set fetch="select" inverse="true" lazy="true" name="avisProduitses" table="avis_produits">
+            <key>
+                <column name="id_produit"/>
+            </key>
+            <one-to-many class="AvisProduits"/>
+        </set>
+        <set fetch="select" inverse="true" lazy="true" name="produitsListeSouhaitses" table="produits_liste_souhaits">
+            <key>
+                <column name="id_produit" not-null="true"/>
+            </key>
+            <one-to-many class="ProduitsListeSouhaits"/>
+        </set>
+        <set fetch="select" inverse="true" lazy="true" name="produitsPromotions" table="produits_promotion">
+            <key>
+                <column name="id_produit" not-null="true"/>
+            </key>
+            <one-to-many class="ProduitsPromotion"/>
+        </set>
+        <set fetch="select" inverse="true" lazy="true" name="variantesProduitses" table="variantes_produits">
+            <key>
+                <column name="id_produit"/>
+            </key>
+            <one-to-many class="VariantesProduits"/>
+        </set>
+        <set fetch="select" inverse="true" lazy="true" name="lignesCommandes" table="lignes_commande">
+            <key>
+                <column name="id_produit"/>
+            </key>
+            <one-to-many class="LignesCommande"/>
+        </set>
+        <set fetch="select" inverse="true" lazy="true" name="statistiquesProduitses" table="statistiques_produits">
+            <key>
+                <column name="id_produit"/>
+            </key>
+            <one-to-many class="StatistiquesProduits"/>
+        </set>
+    </class>
+</hibernate-mapping>

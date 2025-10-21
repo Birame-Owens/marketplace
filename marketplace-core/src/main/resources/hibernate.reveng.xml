@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.org/dtd/hibernate-reverse-engineering-3.0.dtd" >
+
+<hibernate-reverse-engineering>
+  <table-filter match-schema="public" match-name="adresses"/>
+  <table-filter match-schema="public" match-name="attributs_produits"/>
+  <table-filter match-schema="public" match-name="avis_boutiques"/>
+  <table-filter match-schema="public" match-name="avis_produits"/>
+  <table-filter match-schema="public" match-name="avoir_factures"/>
+  <table-filter match-schema="public" match-name="bannières_publicitaires"/>
+  <table-filter match-schema="public" match-name="boutique_categories"/>
+  <table-filter match-schema="public" match-name="boutiques"/>
+  <table-filter match-schema="public" match-name="categories_boutiques"/>
+  <table-filter match-schema="public" match-name="categories_produits"/>
+  <table-filter match-schema="public" match-name="commandes"/>
+  <table-filter match-schema="public" match-name="configurations_boutique"/>
+  <table-filter match-schema="public" match-name="conversations"/>
+  <table-filter match-schema="public" match-name="coupons"/>
+  <table-filter match-schema="public" match-name="documents_boutique"/>
+  <table-filter match-schema="public" match-name="factures"/>
+  <table-filter match-schema="public" match-name="historique_commandes"/>
+  <table-filter match-schema="public" match-name="images_avis"/>
+  <table-filter match-schema="public" match-name="images_produits"/>
+  <table-filter match-schema="public" match-name="lignes_commande"/>
+  <table-filter match-schema="public" match-name="lignes_panier"/>
+  <table-filter match-schema="public" match-name="listes_souhaits"/>
+  <table-filter match-schema="public" match-name="logs_activites"/>
+  <table-filter match-schema="public" match-name="marques"/>
+  <table-filter match-schema="public" match-name="messages"/>
+  <table-filter match-schema="public" match-name="methodes_paiement"/>
+  <table-filter match-schema="public" match-name="notifications"/>
+  <table-filter match-schema="public" match-name="paiements"/>
+  <table-filter match-schema="public" match-name="paniers"/>
+  <table-filter match-schema="public" match-name="parametres_systeme"/>
+  <table-filter match-schema="public" match-name="pieces_jointes_messages"/>
+  <table-filter match-schema="public" match-name="preferences_notifications"/>
+  <table-filter match-schema="public" match-name="produits"/>
+  <table-filter match-schema="public" match-name="produits_liste_souhaits"/>
+  <table-filter match-schema="public" match-name="produits_promotion"/>
+  <table-filter match-schema="public" match-name="promotions"/>
+  <table-filter match-schema="public" match-name="remboursements"/>
+  <table-filter match-schema="public" match-name="roles"/>
+  <table-filter match-schema="public" match-name="statistiques_boutiques"/>
+  <table-filter match-schema="public" match-name="statistiques_produits"/>
+  <table-filter match-schema="public" match-name="statuts_commande"/>
+  <table-filter match-schema="public" match-name="utilisateurs"/>
+  <table-filter match-schema="public" match-name="utilisations_coupons"/>
+  <table-filter match-schema="public" match-name="variantes_produits"/>
+</hibernate-reverse-engineering>

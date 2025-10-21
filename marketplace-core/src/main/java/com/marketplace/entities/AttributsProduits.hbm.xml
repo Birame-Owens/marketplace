@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated 12 oct. 2025, 13:05:11 by Hibernate Tools 6.5.1.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="AttributsProduits" optimistic-lock="none" schema="public" table="attributs_produits">
+        <id name="idAttribut" type="int">
+            <column name="id_attribut"/>
+            <generator class="assigned"/>
+        </id>
+        <many-to-one class="Produits" fetch="select" name="produits">
+            <column name="id_produit"/>
+        </many-to-one>
+        <property name="nomAttribut" type="string">
+            <column length="100" name="nom_attribut" not-null="true"/>
+        </property>
+        <property name="valeurAttribut" type="string">
+            <column name="valeur_attribut" not-null="true"/>
+        </property>
+        <property name="dateCreation" type="timestamp">
+            <column length="29" name="date_creation"/>
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated 12 oct. 2025, 13:05:11 by Hibernate Tools 6.5.1.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="Commandes" optimistic-lock="none" schema="public" table="commandes">
+        <id name="idCommande" type="int">
+            <column name="id_commande"/>
+            <generator class="assigned"/>
+        </id>
+        <many-to-one class="Utilisateurs" fetch="select" name="utilisateurs">
+            <column name="id_utilisateur"/>
+        </many-to-one>
+        <many-to-one class="StatutsCommande" fetch="select" name="statutsCommande">
+            <column name="id_statut"/>
+        </many-to-one>
+        <many-to-one class="Adresses" fetch="select" name="adressesByIdAdresseLivraison">
+            <column name="id_adresse_livraison"/>
+        </many-to-one>
+        <many-to-one class="Adresses" fetch="select" name="adressesByIdAdresseFacturation">
+            <column name="id_adresse_facturation"/>
+        </many-to-one>
+        <property name="numeroCommande" type="string">
+            <column length="50" name="numero_commande" not-null="true" unique="true"/>
+        </property>
+        <property name="montantProduits" type="big_decimal">
+            <column name="montant_produits" not-null="true" precision="10" scale="2"/>
+        </property>
+        <property name="montantLivraison" type="big_decimal">
+            <column name="montant_livraison" precision="10" scale="2"/>
+        </property>
+        <property name="montantRemise" type="big_decimal">
+            <column name="montant_remise" precision="10" scale="2"/>
+        </property>
+        <property name="montantTaxes" type="big_decimal">
+            <column name="montant_taxes" precision="10" scale="2"/>
+        </property>
+        <property name="montantTotal" type="big_decimal">
+            <column name="montant_total" not-null="true" precision="10" scale="2"/>
+        </property>
+        <property name="nomClient" type="string">
+            <column length="200" name="nom_client"/>
+        </property>
+        <property name="emailClient" type="string">
+            <column length="255" name="email_client"/>
+        </property>
+        <property name="telephoneClient" type="string">
+            <column length="20" name="telephone_client"/>
+        </property>
+        <property name="modeLivraison" type="string">
+            <column length="100" name="mode_livraison"/>
+        </property>
+        <property name="fraisLivraison" type="big_decimal">
+            <column name="frais_livraison" precision="10" scale="2"/>
+        </property>
+        <property name="dateLivraisonEstimee" type="date">
+            <column length="13" name="date_livraison_estimee"/>
+        </property>
+        <property name="dateLivraisonReelle" type="timestamp">
+            <column length="29" name="date_livraison_reelle"/>
+        </property>
+        <property name="numeroTracking" type="string">
+            <column length="100" name="numero_tracking"/>
+        </property>
+        <property name="noteClient" type="string">
+            <column name="note_client"/>
+        </property>
+        <property name="noteAdmin" type="string">
+            <column name="note_admin"/>
+        </property>
+        <property name="dateCommande" type="timestamp">
+            <column length="29" name="date_commande"/>
+        </property>
+        <property name="dateModification" type="timestamp">
+            <column length="29" name="date_modification"/>
+        </property>
+        <set fetch="select" inverse="true" lazy="true" name="avisProduitses" table="avis_produits">
+            <key>
+                <column name="id_commande"/>
+            </key>
+            <one-to-many class="AvisProduits"/>
+        </set>
+        <set fetch="select" inverse="true" lazy="true" name="factureses" table="factures">
+            <key>
+                <column name="id_commande"/>
+            </key>
+            <one-to-many class="Factures"/>
+        </set>
+        <set fetch="select" inverse="true" lazy="true" name="paiementses" table="paiements">
+            <key>
+                <column name="id_commande"/>
+            </key>
+            <one-to-many class="Paiements"/>
+        </set>
+        <set fetch="select" inverse="true" lazy="true" name="historiqueCommandeses" table="historique_commandes">
+            <key>
+                <column name="id_commande"/>
+            </key>
+            <one-to-many class="HistoriqueCommandes"/>
+        </set>
+        <set fetch="select" inverse="true" lazy="true" name="avisBoutiqueses" table="avis_boutiques">
+            <key>
+                <column name="id_commande"/>
+            </key>
+            <one-to-many class="AvisBoutiques"/>
+        </set>
+        <set fetch="select" inverse="true" lazy="true" name="utilisationsCouponses" table="utilisations_coupons">
+            <key>
+                <column name="id_commande"/>
+            </key>
+            <one-to-many class="UtilisationsCoupons"/>
+        </set>
+        <set fetch="select" inverse="true" lazy="true" name="remboursementses" table="remboursements">
+            <key>
+                <column name="id_commande"/>
+            </key>
+            <one-to-many class="Remboursements"/>
+        </set>
+        <set fetch="select" inverse="true" lazy="true" name="lignesCommandes" table="lignes_commande">
+            <key>
+                <column name="id_commande"/>
+            </key>
+            <one-to-many class="LignesCommande"/>
+        </set>
+        <set fetch="select" inverse="true" lazy="true" name="conversationses" table="conversations">
+            <key>
+                <column name="id_commande"/>
+            </key>
+            <one-to-many class="Conversations"/>
+        </set>
+    </class>
+</hibernate-mapping>

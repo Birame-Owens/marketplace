@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated 12 oct. 2025, 13:05:11 by Hibernate Tools 6.5.1.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="Adresses" optimistic-lock="none" schema="public" table="adresses">
+        <id name="idAdresse" type="int">
+            <column name="id_adresse"/>
+            <generator class="assigned"/>
+        </id>
+        <many-to-one class="Utilisateurs" fetch="select" name="utilisateurs">
+            <column name="id_utilisateur"/>
+        </many-to-one>
+        <property name="typeAdresse" type="string">
+            <column length="50" name="type_adresse"/>
+        </property>
+        <property name="nomComplet" type="string">
+            <column length="200" name="nom_complet"/>
+        </property>
+        <property name="telephone" type="string">
+            <column length="20" name="telephone"/>
+        </property>
+        <property name="adresseLigne1" type="string">
+            <column length="255" name="adresse_ligne1" not-null="true"/>
+        </property>
+        <property name="adresseLigne2" type="string">
+            <column length="255" name="adresse_ligne2"/>
+        </property>
+        <property name="ville" type="string">
+            <column length="100" name="ville" not-null="true"/>
+        </property>
+        <property name="codePostal" type="string">
+            <column length="20" name="code_postal" not-null="true"/>
+        </property>
+        <property name="region" type="string">
+            <column length="100" name="region"/>
+        </property>
+        <property name="pays" type="string">
+            <column length="100" name="pays" not-null="true"/>
+        </property>
+        <property name="estParDefaut" type="java.lang.Boolean">
+            <column name="est_par_defaut"/>
+        </property>
+        <property name="dateCreation" type="timestamp">
+            <column length="29" name="date_creation"/>
+        </property>
+        <set fetch="select" inverse="true" lazy="true" name="commandesesForIdAdresseLivraison" table="commandes">
+            <key>
+                <column name="id_adresse_livraison"/>
+            </key>
+            <one-to-many class="Commandes"/>
+        </set>
+        <set fetch="select" inverse="true" lazy="true" name="commandesesForIdAdresseFacturation" table="commandes">
+            <key>
+                <column name="id_adresse_facturation"/>
+            </key>
+            <one-to-many class="Commandes"/>
+        </set>
+    </class>
+</hibernate-mapping>

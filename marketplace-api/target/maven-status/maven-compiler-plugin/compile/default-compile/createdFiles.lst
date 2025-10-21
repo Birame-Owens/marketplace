@@ -1,0 +1,7 @@
+com\marketplace\api\controllers\admin\AdminDashboardController.class
+com\marketplace\api\factory\ServiceFactory.class
+com\marketplace\api\controllers\admin\AdminParametreController.class
+com\marketplace\api\config\RestConfig.class
+com\marketplace\api\controllers\admin\AdminUtilisateurController.class
+com\marketplace\api\controllers\admin\AdminAuthController.class
+com\marketplace\api\controllers\admin\AdminBoutiqueController.class

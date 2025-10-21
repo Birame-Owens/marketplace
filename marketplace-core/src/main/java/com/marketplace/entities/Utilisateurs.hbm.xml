@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated 12 oct. 2025, 13:05:11 by Hibernate Tools 6.5.1.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="Utilisateurs" optimistic-lock="none" schema="public" table="utilisateurs">
+        <id name="idUtilisateur" type="int">
+            <column name="id_utilisateur"/>
+            <generator class="assigned"/>
+        </id>
+        <many-to-one class="Roles" fetch="select" name="roles">
+            <column name="id_role"/>
+        </many-to-one>
+        <property name="nom" type="string">
+            <column length="100" name="nom" not-null="true"/>
+        </property>
+        <property name="prenom" type="string">
+            <column length="100" name="prenom" not-null="true"/>
+        </property>
+        <property name="email" type="string">
+            <column length="255" name="email" not-null="true" unique="true"/>
+        </property>
+        <property name="telephone" type="string">
+            <column length="20" name="telephone"/>
+        </property>
+        <property name="motDePasse" type="string">
+            <column length="255" name="mot_de_passe" not-null="true"/>
+        </property>
+        <property name="photoProfil" type="string">
+            <column length="500" name="photo_profil"/>
+        </property>
+        <property name="dateNaissance" type="date">
+            <column length="13" name="date_naissance"/>
+        </property>
+        <property name="genre" type="string">
+            <column length="10" name="genre"/>
+        </property>
+        <property name="estActif" type="java.lang.Boolean">
+            <column name="est_actif"/>
+        </property>
+        <property name="estVerifie" type="java.lang.Boolean">
+            <column name="est_verifie"/>
+        </property>
+        <property name="tokenVerification" type="string">
+            <column length="255" name="token_verification"/>
+        </property>
+        <property name="tokenResetPassword" type="string">
+            <column length="255" name="token_reset_password"/>
+        </property>
+        <property name="dateDerniereConnexion" type="timestamp">
+            <column length="29" name="date_derniere_connexion"/>
+        </property>
+        <property name="dateCreation" type="timestamp">
+            <column length="29" name="date_creation"/>
+        </property>
+        <property name="dateModification" type="timestamp">
+            <column length="29" name="date_modification"/>
+        </property>
+        <set fetch="select" inverse="true" lazy="true" name="factureses" table="factures">
+            <key>
+                <column name="id_utilisateur"/>
+            </key>
+            <one-to-many class="Factures"/>
+        </set>
+        <set fetch="select" inverse="true" lazy="true" name="avisBoutiqueses" table="avis_boutiques">
+            <key>
+                <column name="id_utilisateur"/>
+            </key>
+            <one-to-many class="AvisBoutiques"/>
+        </set>
+        <set fetch="select" inverse="true" lazy="true" name="notificationses" table="notifications">
+            <key>
+                <column name="id_utilisateur"/>
+            </key>
+            <one-to-many class="Notifications"/>
+        </set>
+        <set fetch="select" inverse="true" lazy="true" name="listesSouhaitses" table="listes_souhaits">
+            <key>
+                <column name="id_utilisateur"/>
+            </key>
+            <one-to-many class="ListesSouhaits"/>
+        </set>
+        <set fetch="select" inverse="true" lazy="true" name="remboursementsesForIdUtilisateurDemande" table="remboursements">
+            <key>
+                <column name="id_utilisateur_demande"/>
+            </key>
+            <one-to-many class="Remboursements"/>
+        </set>
+        <set fetch="select" inverse="true" lazy="true" name="messageses" table="messages">
+            <key>
+                <column name="id_expediteur"/>
+            </key>
+            <one-to-many class="Messages"/>
+        </set>
+        <set fetch="select" inverse="true" lazy="true" name="avisProduitses" table="avis_produits">
+            <key>
+                <column name="id_utilisateur"/>
+            </key>
+            <one-to-many class="AvisProduits"/>
+        </set>
+        <set fetch="select" inverse="true" lazy="true" name="conversationses" table="conversations">
+            <key>
+                <column name="id_client"/>
+            </key>
+            <one-to-many class="Conversations"/>
+        </set>
+        <set fetch="select" inverse="true" lazy="true" name="commandeses" table="commandes">
+            <key>
+                <column name="id_utilisateur"/>
+            </key>
+            <one-to-many class="Commandes"/>
+        </set>
+        <set fetch="select" inverse="true" lazy="true" name="panierses" table="paniers">
+            <key>
+                <column name="id_utilisateur" unique="true"/>
+            </key>
+            <one-to-many class="Paniers"/>
+        </set>
+        <set fetch="select" inverse="true" lazy="true" name="historiqueCommandeses" table="historique_commandes">
+            <key>
+                <column name="id_utilisateur"/>
+            </key>
+            <one-to-many class="HistoriqueCommandes"/>
+        </set>
+        <set fetch="select" inverse="true" lazy="true" name="logsActiviteses" table="logs_activites">
+            <key>
+                <column name="id_utilisateur"/>
+            </key>
+            <one-to-many class="LogsActivites"/>
+        </set>
+        <set fetch="select" inverse="true" lazy="true" name="utilisationsCouponses" table="utilisations_coupons">
+            <key>
+                <column name="id_utilisateur"/>
+            </key>
+            <one-to-many class="UtilisationsCoupons"/>
+        </set>
+        <set fetch="select" inverse="true" lazy="true" name="boutiqueses" table="boutiques">
+            <key>
+                <column name="id_gerant"/>
+            </key>
+            <one-to-many class="Boutiques"/>
+        </set>
+        <set fetch="select" inverse="true" lazy="true" name="adresseses" table="adresses">
+            <key>
+                <column name="id_utilisateur"/>
+            </key>
+            <one-to-many class="Adresses"/>
+        </set>
+        <set fetch="select" inverse="true" lazy="true" name="preferencesNotificationses" table="preferences_notifications">
+            <key>
+                <column name="id_utilisateur" unique="true"/>
+            </key>
+            <one-to-many class="PreferencesNotifications"/>
+        </set>
+        <set fetch="select" inverse="true" lazy="true" name="remboursementsesForIdUtilisateurValidation" table="remboursements">
+            <key>
+                <column name="id_utilisateur_validation"/>
+            </key>
+            <one-to-many class="Remboursements"/>
+        </set>
+    </class>
+</hibernate-mapping>

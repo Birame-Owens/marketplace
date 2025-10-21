@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated 12 oct. 2025, 13:05:11 by Hibernate Tools 6.5.1.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="Factures" optimistic-lock="none" schema="public" table="factures">
+        <id name="idFacture" type="int">
+            <column name="id_facture"/>
+            <generator class="assigned"/>
+        </id>
+        <many-to-one class="Utilisateurs" fetch="select" name="utilisateurs">
+            <column name="id_utilisateur"/>
+        </many-to-one>
+        <many-to-one class="Boutiques" fetch="select" name="boutiques">
+            <column name="id_boutique"/>
+        </many-to-one>
+        <many-to-one class="Commandes" fetch="select" name="commandes">
+            <column name="id_commande"/>
+        </many-to-one>
+        <property name="numeroFacture" type="string">
+            <column length="50" name="numero_facture" not-null="true" unique="true"/>
+        </property>
+        <property name="montantHt" type="big_decimal">
+            <column name="montant_ht" not-null="true" precision="10" scale="2"/>
+        </property>
+        <property name="montantTva" type="big_decimal">
+            <column name="montant_tva" precision="10" scale="2"/>
+        </property>
+        <property name="montantTtc" type="big_decimal">
+            <column name="montant_ttc" not-null="true" precision="10" scale="2"/>
+        </property>
+        <property name="tauxTva" type="big_decimal">
+            <column name="taux_tva" precision="5" scale="2"/>
+        </property>
+        <property name="nomClient" type="string">
+            <column length="200" name="nom_client"/>
+        </property>
+        <property name="adresseFacturation" type="string">
+            <column name="adresse_facturation"/>
+        </property>
+        <property name="emailClient" type="string">
+            <column length="255" name="email_client"/>
+        </property>
+        <property name="nomBoutique" type="string">
+            <column length="255" name="nom_boutique"/>
+        </property>
+        <property name="adresseBoutique" type="string">
+            <column name="adresse_boutique"/>
+        </property>
+        <property name="siretBoutique" type="string">
+            <column length="50" name="siret_boutique"/>
+        </property>
+        <property name="cheminPdf" type="string">
+            <column length="500" name="chemin_pdf"/>
+        </property>
+        <property name="dateEmission" type="date">
+            <column length="13" name="date_emission" not-null="true"/>
+        </property>
+        <property name="dateEcheance" type="date">
+            <column length="13" name="date_echeance"/>
+        </property>
+        <property name="datePaiement" type="date">
+            <column length="13" name="date_paiement"/>
+        </property>
+        <property name="statutFacture" type="string">
+            <column length="50" name="statut_facture"/>
+        </property>
+        <property name="dateCreation" type="timestamp">
+            <column length="29" name="date_creation"/>
+        </property>
+        <set fetch="select" inverse="true" lazy="true" name="avoirFactureses" table="avoir_factures">
+            <key>
+                <column name="id_facture"/>
+            </key>
+            <one-to-many class="AvoirFactures"/>
+        </set>
+    </class>
+</hibernate-mapping>

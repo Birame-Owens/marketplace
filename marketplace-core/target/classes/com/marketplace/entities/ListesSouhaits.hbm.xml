@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated 12 oct. 2025, 13:05:11 by Hibernate Tools 6.5.1.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="ListesSouhaits" optimistic-lock="none" schema="public" table="listes_souhaits">
+        <id name="idListe" type="int">
+            <column name="id_liste"/>
+            <generator class="assigned"/>
+        </id>
+        <many-to-one class="Utilisateurs" fetch="select" name="utilisateurs">
+            <column name="id_utilisateur"/>
+        </many-to-one>
+        <property name="nomListe" type="string">
+            <column length="100" name="nom_liste"/>
+        </property>
+        <property name="estPublique" type="java.lang.Boolean">
+            <column name="est_publique"/>
+        </property>
+        <property name="dateCreation" type="timestamp">
+            <column length="29" name="date_creation"/>
+        </property>
+        <set fetch="select" inverse="true" lazy="true" name="produitsListeSouhaitses" table="produits_liste_souhaits">
+            <key>
+                <column name="id_liste" not-null="true"/>
+            </key>
+            <one-to-many class="ProduitsListeSouhaits"/>
+        </set>
+    </class>
+</hibernate-mapping>

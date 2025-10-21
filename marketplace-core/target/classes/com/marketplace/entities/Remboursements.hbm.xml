@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated 12 oct. 2025, 13:05:11 by Hibernate Tools 6.5.1.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="Remboursements" optimistic-lock="none" schema="public" table="remboursements">
+        <id name="idRemboursement" type="int">
+            <column name="id_remboursement"/>
+            <generator class="assigned"/>
+        </id>
+        <many-to-one class="Utilisateurs" fetch="select" name="utilisateursByIdUtilisateurDemande">
+            <column name="id_utilisateur_demande"/>
+        </many-to-one>
+        <many-to-one class="Utilisateurs" fetch="select" name="utilisateursByIdUtilisateurValidation">
+            <column name="id_utilisateur_validation"/>
+        </many-to-one>
+        <many-to-one class="Commandes" fetch="select" name="commandes">
+            <column name="id_commande"/>
+        </many-to-one>
+        <many-to-one class="Paiements" fetch="select" name="paiements">
+            <column name="id_paiement"/>
+        </many-to-one>
+        <property name="montantRembourse" type="big_decimal">
+            <column name="montant_rembourse" not-null="true" precision="10" scale="2"/>
+        </property>
+        <property name="raisonRemboursement" type="string">
+            <column name="raison_remboursement"/>
+        </property>
+        <property name="statutRemboursement" type="string">
+            <column length="50" name="statut_remboursement"/>
+        </property>
+        <property name="numeroTransactionRemboursement" type="string">
+            <column length="255" name="numero_transaction_remboursement"/>
+        </property>
+        <property name="dateDemande" type="timestamp">
+            <column length="29" name="date_demande"/>
+        </property>
+        <property name="dateValidation" type="timestamp">
+            <column length="29" name="date_validation"/>
+        </property>
+    </class>
+</hibernate-mapping>

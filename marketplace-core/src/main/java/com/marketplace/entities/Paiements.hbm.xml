@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated 12 oct. 2025, 13:05:11 by Hibernate Tools 6.5.1.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="Paiements" optimistic-lock="none" schema="public" table="paiements">
+        <id name="idPaiement" type="int">
+            <column name="id_paiement"/>
+            <generator class="assigned"/>
+        </id>
+        <many-to-one class="MethodesPaiement" fetch="select" name="methodesPaiement">
+            <column name="id_methode"/>
+        </many-to-one>
+        <many-to-one class="Commandes" fetch="select" name="commandes">
+            <column name="id_commande"/>
+        </many-to-one>
+        <property name="numeroTransaction" type="string">
+            <column length="255" name="numero_transaction" unique="true"/>
+        </property>
+        <property name="montant" type="big_decimal">
+            <column name="montant" not-null="true" precision="10" scale="2"/>
+        </property>
+        <property name="devise" type="string">
+            <column length="10" name="devise"/>
+        </property>
+        <property name="statutPaiement" type="string">
+            <column length="50" name="statut_paiement" not-null="true"/>
+        </property>
+        <property name="donneesPaiement" type="serializable">
+            <column name="donnees_paiement"/>
+        </property>
+        <property name="dernierChiffresCarte" type="string">
+            <column length="4" name="dernier_chiffres_carte"/>
+        </property>
+        <property name="typeCarte" type="string">
+            <column length="50" name="type_carte"/>
+        </property>
+        <property name="datePaiement" type="timestamp">
+            <column length="29" name="date_paiement"/>
+        </property>
+        <property name="dateValidation" type="timestamp">
+            <column length="29" name="date_validation"/>
+        </property>
+        <property name="messageErreur" type="string">
+            <column name="message_erreur"/>
+        </property>
+        <property name="note" type="string">
+            <column name="note"/>
+        </property>
+        <set fetch="select" inverse="true" lazy="true" name="remboursementses" table="remboursements">
+            <key>
+                <column name="id_paiement"/>
+            </key>
+            <one-to-many class="Remboursements"/>
+        </set>
+    </class>
+</hibernate-mapping>

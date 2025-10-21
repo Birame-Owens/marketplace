@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated 12 oct. 2025, 13:05:11 by Hibernate Tools 6.5.1.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="AvoirFactures" optimistic-lock="none" schema="public" table="avoir_factures">
+        <id name="idAvoir" type="int">
+            <column name="id_avoir"/>
+            <generator class="assigned"/>
+        </id>
+        <many-to-one class="Factures" fetch="select" name="factures">
+            <column name="id_facture"/>
+        </many-to-one>
+        <property name="numeroAvoir" type="string">
+            <column length="50" name="numero_avoir" not-null="true" unique="true"/>
+        </property>
+        <property name="montantAvoir" type="big_decimal">
+            <column name="montant_avoir" not-null="true" precision="10" scale="2"/>
+        </property>
+        <property name="raisonAvoir" type="string">
+            <column name="raison_avoir"/>
+        </property>
+        <property name="cheminPdf" type="string">
+            <column length="500" name="chemin_pdf"/>
+        </property>
+        <property name="dateEmission" type="date">
+            <column length="13" name="date_emission" not-null="true"/>
+        </property>
+        <property name="dateCreation" type="timestamp">
+            <column length="29" name="date_creation"/>
+        </property>
+    </class>
+</hibernate-mapping>

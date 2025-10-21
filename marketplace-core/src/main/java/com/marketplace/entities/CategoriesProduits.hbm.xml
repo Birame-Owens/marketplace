@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated 12 oct. 2025, 13:05:11 by Hibernate Tools 6.5.1.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="CategoriesProduits" optimistic-lock="none" schema="public" table="categories_produits">
+        <id name="idCategorie" type="int">
+            <column name="id_categorie"/>
+            <generator class="assigned"/>
+        </id>
+        <many-to-one class="CategoriesProduits" fetch="select" name="categoriesProduits">
+            <column name="id_parent"/>
+        </many-to-one>
+        <property name="nomCategorie" type="string">
+            <column length="100" name="nom_categorie" not-null="true"/>
+        </property>
+        <property name="slug" type="string">
+            <column length="100" name="slug" not-null="true" unique="true"/>
+        </property>
+        <property name="description" type="string">
+            <column name="description"/>
+        </property>
+        <property name="image" type="string">
+            <column length="500" name="image"/>
+        </property>
+        <property name="icone" type="string">
+            <column length="255" name="icone"/>
+        </property>
+        <property name="ordre" type="java.lang.Integer">
+            <column name="ordre"/>
+        </property>
+        <property name="estActive" type="java.lang.Boolean">
+            <column name="est_active"/>
+        </property>
+        <property name="dateCreation" type="timestamp">
+            <column length="29" name="date_creation"/>
+        </property>
+        <set fetch="select" inverse="true" lazy="true" name="categoriesProduitses" table="categories_produits">
+            <key>
+                <column name="id_parent"/>
+            </key>
+            <one-to-many class="CategoriesProduits"/>
+        </set>
+        <set fetch="select" inverse="true" lazy="true" name="produitses" table="produits">
+            <key>
+                <column name="id_categorie"/>
+            </key>
+            <one-to-many class="Produits"/>
+        </set>
+    </class>
+</hibernate-mapping>

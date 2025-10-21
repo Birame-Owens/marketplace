@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated 12 oct. 2025, 13:05:11 by Hibernate Tools 6.5.1.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="Boutiques" optimistic-lock="none" schema="public" table="boutiques">
+        <id name="idBoutique" type="int">
+            <column name="id_boutique"/>
+            <generator class="assigned"/>
+        </id>
+        <many-to-one class="Utilisateurs" fetch="select" name="utilisateurs">
+            <column name="id_gerant"/>
+        </many-to-one>
+        <property name="nomBoutique" type="string">
+            <column length="255" name="nom_boutique" not-null="true"/>
+        </property>
+        <property name="slug" type="string">
+            <column length="255" name="slug" not-null="true" unique="true"/>
+        </property>
+        <property name="description" type="string">
+            <column name="description"/>
+        </property>
+        <property name="logo" type="string">
+            <column length="500" name="logo"/>
+        </property>
+        <property name="banniere" type="string">
+            <column length="500" name="banniere"/>
+        </property>
+        <property name="emailBoutique" type="string">
+            <column length="255" name="email_boutique"/>
+        </property>
+        <property name="telephoneBoutique" type="string">
+            <column length="20" name="telephone_boutique"/>
+        </property>
+        <property name="adresseBoutique" type="string">
+            <column name="adresse_boutique"/>
+        </property>
+        <property name="ville" type="string">
+            <column length="100" name="ville"/>
+        </property>
+        <property name="pays" type="string">
+            <column length="100" name="pays"/>
+        </property>
+        <property name="numeroSiret" type="string">
+            <column length="50" name="numero_siret"/>
+        </property>
+        <property name="numeroTva" type="string">
+            <column length="50" name="numero_tva"/>
+        </property>
+        <property name="raisonSociale" type="string">
+            <column length="255" name="raison_sociale"/>
+        </property>
+        <property name="estActive" type="java.lang.Boolean">
+            <column name="est_active"/>
+        </property>
+        <property name="estVerifiee" type="java.lang.Boolean">
+            <column name="est_verifiee"/>
+        </property>
+        <property name="commissionPourcentage" type="big_decimal">
+            <column name="commission_pourcentage" precision="5" scale="2"/>
+        </property>
+        <property name="noteMoyenne" type="big_decimal">
+            <column name="note_moyenne" precision="3" scale="2"/>
+        </property>
+        <property name="nombreAvis" type="java.lang.Integer">
+            <column name="nombre_avis"/>
+        </property>
+        <property name="nombreVentes" type="java.lang.Integer">
+            <column name="nombre_ventes"/>
+        </property>
+        <property name="horairesOuverture" type="serializable">
+            <column name="horaires_ouverture"/>
+        </property>
+        <property name="dateCreation" type="timestamp">
+            <column length="29" name="date_creation"/>
+        </property>
+        <property name="dateModification" type="timestamp">
+            <column length="29" name="date_modification"/>
+        </property>
+        <property name="dateVerification" type="timestamp">
+            <column length="29" name="date_verification"/>
+        </property>
+        <set fetch="select" inverse="true" lazy="true" name="configurationsBoutiques" table="configurations_boutique">
+            <key>
+                <column name="id_boutique" unique="true"/>
+            </key>
+            <one-to-many class="ConfigurationsBoutique"/>
+        </set>
+        <set fetch="select" inverse="true" lazy="true" name="couponses" table="coupons">
+            <key>
+                <column name="id_boutique"/>
+            </key>
+            <one-to-many class="Coupons"/>
+        </set>
+        <set fetch="select" inverse="true" lazy="true" name="avisBoutiqueses" table="avis_boutiques">
+            <key>
+                <column name="id_boutique"/>
+            </key>
+            <one-to-many class="AvisBoutiques"/>
+        </set>
+        <set fetch="select" inverse="true" lazy="true" name="promotionses" table="promotions">
+            <key>
+                <column name="id_boutique"/>
+            </key>
+            <one-to-many class="Promotions"/>
+        </set>
+        <set fetch="select" inverse="true" lazy="true" name="conversationses" table="conversations">
+            <key>
+                <column name="id_boutique"/>
+            </key>
+            <one-to-many class="Conversations"/>
+        </set>
+        <set fetch="select" inverse="true" lazy="true" name="documentsBoutiques" table="documents_boutique">
+            <key>
+                <column name="id_boutique"/>
+            </key>
+            <one-to-many class="DocumentsBoutique"/>
+        </set>
+        <set fetch="select" inverse="true" lazy="true" name="lignesCommandes" table="lignes_commande">
+            <key>
+                <column name="id_boutique"/>
+            </key>
+            <one-to-many class="LignesCommande"/>
+        </set>
+        <set fetch="select" inverse="false" lazy="true" name="categoriesBoutiqueses" table="boutique_categories">
+            <key>
+                <column name="id_boutique" not-null="true"/>
+            </key>
+            <many-to-many entity-name="CategoriesBoutiques">
+                <column name="id_categorie_boutique" not-null="true"/>
+            </many-to-many>
+        </set>
+        <set fetch="select" inverse="true" lazy="true" name="statistiquesBoutiqueses" table="statistiques_boutiques">
+            <key>
+                <column name="id_boutique"/>
+            </key>
+            <one-to-many class="StatistiquesBoutiques"/>
+        </set>
+        <set fetch="select" inverse="true" lazy="true" name="produitses" table="produits">
+            <key>
+                <column name="id_boutique"/>
+            </key>
+            <one-to-many class="Produits"/>
+        </set>
+        <set fetch="select" inverse="true" lazy="true" name="factureses" table="factures">
+            <key>
+                <column name="id_boutique"/>
+            </key>
+            <one-to-many class="Factures"/>
+        </set>
+    </class>
+</hibernate-mapping>

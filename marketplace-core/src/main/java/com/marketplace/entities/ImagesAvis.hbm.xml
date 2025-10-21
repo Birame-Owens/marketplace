@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated 12 oct. 2025, 13:05:11 by Hibernate Tools 6.5.1.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="ImagesAvis" optimistic-lock="none" schema="public" table="images_avis">
+        <id name="idImageAvis" type="int">
+            <column name="id_image_avis"/>
+            <generator class="assigned"/>
+        </id>
+        <many-to-one class="AvisProduits" fetch="select" name="avisProduits">
+            <column name="id_avis"/>
+        </many-to-one>
+        <property name="urlImage" type="string">
+            <column length="500" name="url_image" not-null="true"/>
+        </property>
+        <property name="dateCreation" type="timestamp">
+            <column length="29" name="date_creation"/>
+        </property>
+    </class>
+</hibernate-mapping>

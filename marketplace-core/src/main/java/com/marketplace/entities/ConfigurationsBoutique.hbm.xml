@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated 12 oct. 2025, 13:05:11 by Hibernate Tools 6.5.1.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="ConfigurationsBoutique" optimistic-lock="none" schema="public" table="configurations_boutique">
+        <id name="idConfiguration" type="int">
+            <column name="id_configuration"/>
+            <generator class="assigned"/>
+        </id>
+        <many-to-one class="Boutiques" fetch="select" name="boutiques">
+            <column name="id_boutique" unique="true"/>
+        </many-to-one>
+        <property name="livraisonGratuiteAuDessus" type="big_decimal">
+            <column name="livraison_gratuite_au_dessus" precision="10" scale="2"/>
+        </property>
+        <property name="delaiPreparationJours" type="java.lang.Integer">
+            <column name="delai_preparation_jours"/>
+        </property>
+        <property name="retourAutorise" type="java.lang.Boolean">
+            <column name="retour_autorise"/>
+        </property>
+        <property name="delaiRetourJours" type="java.lang.Integer">
+            <column name="delai_retour_jours"/>
+        </property>
+        <property name="modesPaiementAcceptes" type="serializable">
+            <column name="modes_paiement_acceptes"/>
+        </property>
+        <property name="emailNotification" type="string">
+            <column length="255" name="email_notification"/>
+        </property>
+        <property name="telephoneNotification" type="string">
+            <column length="20" name="telephone_notification"/>
+        </property>
+        <property name="dateModification" type="timestamp">
+            <column length="29" name="date_modification"/>
+        </property>
+    </class>
+</hibernate-mapping>

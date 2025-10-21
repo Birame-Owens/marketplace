@@ -1,0 +1,248 @@
+marketplace-core/src/main/java/com/marketplace/
+
+├── entities/                           ← ✅ 43 ENTITÉS (déjà créées)
+│   ├── Utilisateurs.java
+│   ├── Roles.java
+│   ├── Boutiques.java
+│   ├── Produits.java
+│   ├── Commandes.java
+│   ├── Paiements.java
+│   ├── ParametresSysteme.java
+│   └── ... (toutes les autres entités)
+│
+├── dao/
+│   ├── common/                         ← DAO de base
+│   │   └── BaseDAO.java
+│   │
+│   └── admin/                          ← DAO ADMIN
+│       ├── RolesDAO.java
+│       ├── UtilisateursDAO.java
+│       ├── BoutiquesDAO.java
+│       ├── ProduitsDAO.java
+│       ├── CommandesDAO.java
+│       ├── PaiementsDAO.java
+│       └── ParametresSystemeDAO.java
+│
+├── dto/
+│   ├── common/                         ← DTO COMMUNS
+│   │   ├── ApiResponse.java
+│   │   ├── LoginRequest.java
+│   │   └── LoginResponse.java
+│   │
+│   └── admin/
+│       ├── request/                    ← REQUÊTES ADMIN
+│       │   ├── CreateUtilisateurRequest.java
+│       │   ├── UpdateUtilisateurRequest.java
+│       │   ├── CreateBoutiqueRequest.java
+│       │   ├── UpdateBoutiqueRequest.java
+│       │   ├── CreateParametreRequest.java
+│       │   └── UpdateParametreRequest.java
+│       │
+│       └── response/                   ← RÉPONSES ADMIN
+│           ├── UtilisateurResponse.java
+│           ├── BoutiqueResponse.java
+│           ├── AdminDashboardResponse.java
+│           ├── StatistiqueResponse.java
+│           └── ParametreResponse.java
+│
+├── services/
+│   └── admin/                          ← SERVICES ADMIN
+│       ├── AdminAuthService.java
+│       ├── AdminUtilisateurService.java
+│       ├── AdminBoutiqueService.java
+│       ├── AdminProduitService.java
+│       ├── AdminCommandeService.java
+│       ├── AdminPaiementService.java
+│       ├── AdminStatistiqueService.java
+│       └── AdminParametreService.java
+│
+└── utils/                              ← UTILITAIRES
+    ├── PasswordUtil.java
+    ├── ValidationUtil.java
+    └── DateUtil.java
+```
+
+---
+
+## 📂 MARKETPLACE-API (API REST + Frontend)
+```
+marketplace-api/
+
+├── src/main/java/com/marketplace/api/
+│   │
+│   ├── config/                         ← CONFIGURATION
+│   │   ├── RestConfig.java             (Configuration JAX-RS)
+│   │   └── CorsFilter.java             (Filtre CORS)
+│   │
+│   └── controllers/
+│       └── admin/                      ← CONTROLLERS ADMIN
+│           ├── AdminAuthController.java
+│           ├── AdminDashboardController.java
+│           ├── AdminUtilisateurController.java
+│           ├── AdminBoutiqueController.java
+│           ├── AdminProduitController.java
+│           ├── AdminCommandeController.java
+│           ├── AdminPaiementController.java
+│           └── AdminParametreController.java
+│
+└── src/main/webapp/                    ← FRONTEND
+    │
+    ├── admin/                          ← INTERFACE ADMIN
+    │   │
+    │   ├── pages/                      ← PAGES HTML
+    │   │   ├── login.html              (Connexion admin)
+    │   │   ├── dashboard.html          (Tableau de bord)
+    │   │   ├── utilisateurs.html       (Gestion utilisateurs)
+    │   │   ├── boutiques.html          (Gestion boutiques)
+    │   │   ├── produits.html           (Gestion produits)
+    │   │   ├── commandes.html          (Gestion commandes)
+    │   │   ├── paiements.html          (Gestion paiements)
+    │   │   └── parametres.html         (Paramètres système)
+    │   │
+    │   ├── css/                        ← STYLES
+    │   │   ├── admin.css               (Styles principaux admin)
+    │   │   ├── login.css               (Styles page connexion)
+    │   │   ├── dashboard.css           (Styles dashboard)
+    │   │   └── tables.css              (Styles tableaux)
+    │   │
+    │   ├── js/                         ← SCRIPTS JAVASCRIPT
+    │   │   ├── config.js               (Configuration API)
+    │   │   ├── auth.js                 (Authentification)
+    │   │   ├── dashboard.js            (Dashboard)
+    │   │   ├── utilisateurs.js         (Gestion utilisateurs)
+    │   │   ├── boutiques.js            (Gestion boutiques)
+    │   │   ├── produits.js             (Gestion produits)
+    │   │   ├── commandes.js            (Gestion commandes)
+    │   │   ├── paiements.js            (Gestion paiements)
+    │   │   ├── parametres.js           (Paramètres système)
+    │   │   └── utils.js                (Fonctions utilitaires)
+    │   │
+    │   └── components/                 ← COMPOSANTS RÉUTILISABLES
+    │       ├── sidebar.html            (Menu latéral)
+    │       ├── navbar.html             (Barre de navigation)
+    │       └── modals.html             (Modales)
+    │
+    ├── assets/                         ← RESSOURCES STATIQUES
+    │   ├── images/                     (Images, logos)
+    │   ├── icons/                      (Icônes)
+    │   └── fonts/                      (Polices)
+    │
+    └── WEB-INF/
+        └── web.xml                     (Configuration webapp)
+```
+
+---
+
+## 📋 RÉCAPITULATIF DES MODULES
+
+### ✅ MARKETPLACE-CORE (7 packages)
+
+| Package | Contenu | Nombre |
+|---------|---------|--------|
+| `entities` | Entités JPA | 43 classes |
+| `dao.common` | DAO de base | 1 classe |
+| `dao.admin` | DAO Admin | 7 classes |
+| `dto.common` | DTO communs | 3 classes |
+| `dto.admin.request` | Requêtes Admin | 6 classes |
+| `dto.admin.response` | Réponses Admin | 5 classes |
+| `services.admin` | Services Admin | 8 classes |
+| `utils` | Utilitaires | 3 classes |
+
+**TOTAL : 76 classes**
+
+---
+
+### ✅ MARKETPLACE-API (3 packages + Frontend)
+
+| Package/Dossier | Contenu | Nombre |
+|-----------------|---------|--------|
+| `config` | Configuration REST | 2 classes |
+| `controllers.admin` | Controllers REST | 8 classes |
+| `admin/pages` | Pages HTML | 8 fichiers |
+| `admin/css` | Feuilles de style | 4 fichiers |
+| `admin/js` | Scripts JavaScript | 10 fichiers |
+| `admin/components` | Composants HTML | 3 fichiers |
+
+**TOTAL Backend : 10 classes Java**  
+**TOTAL Frontend : 25 fichiers HTML/CSS/JS**
+
+---
+
+## 🎯 FONCTIONNALITÉS PAR MODULE
+
+### 1. AUTHENTIFICATION
+- **Backend** : `AdminAuthService.java`, `AdminAuthController.java`
+- **Frontend** : `login.html`, `auth.js`
+
+### 2. DASHBOARD
+- **Backend** : `AdminStatistiqueService.java`, `AdminDashboardController.java`
+- **Frontend** : `dashboard.html`, `dashboard.js`
+
+### 3. GESTION UTILISATEURS
+- **Backend** : `AdminUtilisateurService.java`, `AdminUtilisateurController.java`
+- **Frontend** : `utilisateurs.html`, `utilisateurs.js`
+
+### 4. GESTION BOUTIQUES
+- **Backend** : `AdminBoutiqueService.java`, `AdminBoutiqueController.java`
+- **Frontend** : `boutiques.html`, `boutiques.js`
+
+### 5. GESTION PRODUITS
+- **Backend** : `AdminProduitService.java`, `AdminProduitController.java`
+- **Frontend** : `produits.html`, `produits.js`
+
+### 6. GESTION COMMANDES
+- **Backend** : `AdminCommandeService.java`, `AdminCommandeController.java`
+- **Frontend** : `commandes.html`, `commandes.js`
+
+### 7. GESTION PAIEMENTS
+- **Backend** : `AdminPaiementService.java`, `AdminPaiementController.java`
+- **Frontend** : `paiements.html`, `paiements.js`
+
+### 8. PARAMÈTRES SYSTÈME
+- **Backend** : `AdminParametreService.java`, `AdminParametreController.java`
+- **Frontend** : `parametres.html`, `parametres.js`
+
+---
+
+## 📊 ARCHITECTURE VISUELLE
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    MARKETPLACE-API                          │
+│                    (Frontend Admin)                         │
+│  ┌──────────┐  ┌───────────┐  ┌──────────┐  ┌───────────┐ │
+│  │ login.   │  │dashboard. │  │utilisat. │  │boutiques. │ │
+│  │  html    │  │   html    │  │   html   │  │   html    │ │
+│  └──────────┘  └───────────┘  └──────────┘  └───────────┘ │
+│         │              │              │              │      │
+│         └──────────────┴──────────────┴──────────────┘      │
+│                        │                                    │
+│                   API REST (JAX-RS)                         │
+│         ┌──────────────┴──────────────┐                    │
+│         │      Controllers Admin       │                    │
+│         │  (8 endpoints REST)          │                    │
+│         └──────────────┬──────────────┘                    │
+└────────────────────────┼──────────────────────────────────┘
+                         │
+┌────────────────────────┼──────────────────────────────────┐
+│                 MARKETPLACE-CORE                           │
+│                (Backend - Logique métier)                  │
+│         ┌──────────────┴──────────────┐                   │
+│         │     Services Admin           │                   │
+│         │  (8 services métier)         │                   │
+│         └──────────────┬──────────────┘                   │
+│         ┌──────────────┴──────────────┐                   │
+│         │         DAO Admin            │                   │
+│         │  (7 accès base de données)   │                   │
+│         └──────────────┬──────────────┘                   │
+│         ┌──────────────┴──────────────┐                   │
+│         │       Entités JPA            │                   │
+│         │     (43 tables)              │                   │
+│         └──────────────┬──────────────┘                   │
+└────────────────────────┼──────────────────────────────────┘
+                         │
+                         ▼
+              ┌──────────────────┐
+              │   PostgreSQL     │
+              │   (Base de       │
+              │    données)      │
+              └──────────────────┘

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated 12 oct. 2025, 13:05:11 by Hibernate Tools 6.5.1.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="Conversations" optimistic-lock="none" schema="public" table="conversations">
+        <id name="idConversation" type="int">
+            <column name="id_conversation"/>
+            <generator class="assigned"/>
+        </id>
+        <many-to-one class="Utilisateurs" fetch="select" name="utilisateurs">
+            <column name="id_client"/>
+        </many-to-one>
+        <many-to-one class="Boutiques" fetch="select" name="boutiques">
+            <column name="id_boutique"/>
+        </many-to-one>
+        <many-to-one class="Commandes" fetch="select" name="commandes">
+            <column name="id_commande"/>
+        </many-to-one>
+        <property name="sujet" type="string">
+            <column length="255" name="sujet"/>
+        </property>
+        <property name="statutConversation" type="string">
+            <column length="50" name="statut_conversation"/>
+        </property>
+        <property name="dateCreation" type="timestamp">
+            <column length="29" name="date_creation"/>
+        </property>
+        <property name="dateDerniereActivite" type="timestamp">
+            <column length="29" name="date_derniere_activite"/>
+        </property>
+        <set fetch="select" inverse="true" lazy="true" name="messageses" table="messages">
+            <key>
+                <column name="id_conversation"/>
+            </key>
+            <one-to-many class="Messages"/>
+        </set>
+    </class>
+</hibernate-mapping>

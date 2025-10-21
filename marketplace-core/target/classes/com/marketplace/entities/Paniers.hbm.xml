@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated 12 oct. 2025, 13:05:11 by Hibernate Tools 6.5.1.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="Paniers" optimistic-lock="none" schema="public" table="paniers">
+        <id name="idPanier" type="int">
+            <column name="id_panier"/>
+            <generator class="assigned"/>
+        </id>
+        <many-to-one class="Utilisateurs" fetch="select" name="utilisateurs">
+            <column name="id_utilisateur" unique="true"/>
+        </many-to-one>
+        <property name="sessionId" type="string">
+            <column length="255" name="session_id"/>
+        </property>
+        <property name="dateCreation" type="timestamp">
+            <column length="29" name="date_creation"/>
+        </property>
+        <property name="dateModification" type="timestamp">
+            <column length="29" name="date_modification"/>
+        </property>
+        <set fetch="select" inverse="true" lazy="true" name="lignesPaniers" table="lignes_panier">
+            <key>
+                <column name="id_panier"/>
+            </key>
+            <one-to-many class="LignesPanier"/>
+        </set>
+    </class>
+</hibernate-mapping>

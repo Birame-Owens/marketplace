@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated 12 oct. 2025, 13:05:11 by Hibernate Tools 6.5.1.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="Promotions" optimistic-lock="none" schema="public" table="promotions">
+        <id name="idPromotion" type="int">
+            <column name="id_promotion"/>
+            <generator class="assigned"/>
+        </id>
+        <many-to-one class="Boutiques" fetch="select" name="boutiques">
+            <column name="id_boutique"/>
+        </many-to-one>
+        <property name="nomPromotion" type="string">
+            <column length="255" name="nom_promotion" not-null="true"/>
+        </property>
+        <property name="description" type="string">
+            <column name="description"/>
+        </property>
+        <property name="typePromotion" type="string">
+            <column length="50" name="type_promotion"/>
+        </property>
+        <property name="pourcentageReduction" type="big_decimal">
+            <column name="pourcentage_reduction" precision="5" scale="2"/>
+        </property>
+        <property name="estActive" type="java.lang.Boolean">
+            <column name="est_active"/>
+        </property>
+        <property name="dateDebut" type="timestamp">
+            <column length="29" name="date_debut" not-null="true"/>
+        </property>
+        <property name="dateFin" type="timestamp">
+            <column length="29" name="date_fin" not-null="true"/>
+        </property>
+        <property name="dateCreation" type="timestamp">
+            <column length="29" name="date_creation"/>
+        </property>
+        <set fetch="select" inverse="true" lazy="true" name="produitsPromotions" table="produits_promotion">
+            <key>
+                <column name="id_promotion" not-null="true"/>
+            </key>
+            <one-to-many class="ProduitsPromotion"/>
+        </set>
+    </class>
+</hibernate-mapping>

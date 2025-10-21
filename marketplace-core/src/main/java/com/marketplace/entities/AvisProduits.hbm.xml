@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated 12 oct. 2025, 13:05:11 by Hibernate Tools 6.5.1.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="AvisProduits" optimistic-lock="none" schema="public" table="avis_produits">
+        <id name="idAvis" type="int">
+            <column name="id_avis"/>
+            <generator class="assigned"/>
+        </id>
+        <many-to-one class="Produits" fetch="select" name="produits">
+            <column name="id_produit"/>
+        </many-to-one>
+        <many-to-one class="Utilisateurs" fetch="select" name="utilisateurs">
+            <column name="id_utilisateur"/>
+        </many-to-one>
+        <many-to-one class="Commandes" fetch="select" name="commandes">
+            <column name="id_commande"/>
+        </many-to-one>
+        <property name="note" type="int">
+            <column name="note" not-null="true"/>
+        </property>
+        <property name="titre" type="string">
+            <column length="255" name="titre"/>
+        </property>
+        <property name="commentaire" type="string">
+            <column name="commentaire"/>
+        </property>
+        <property name="estVerifie" type="java.lang.Boolean">
+            <column name="est_verifie"/>
+        </property>
+        <property name="estSignale" type="java.lang.Boolean">
+            <column name="est_signale"/>
+        </property>
+        <property name="estPublie" type="java.lang.Boolean">
+            <column name="est_publie"/>
+        </property>
+        <property name="reponseVendeur" type="string">
+            <column name="reponse_vendeur"/>
+        </property>
+        <property name="dateReponse" type="timestamp">
+            <column length="29" name="date_reponse"/>
+        </property>
+        <property name="nombreVotesUtile" type="java.lang.Integer">
+            <column name="nombre_votes_utile"/>
+        </property>
+        <property name="nombreVotesInutile" type="java.lang.Integer">
+            <column name="nombre_votes_inutile"/>
+        </property>
+        <property name="dateCreation" type="timestamp">
+            <column length="29" name="date_creation"/>
+        </property>
+        <property name="dateModification" type="timestamp">
+            <column length="29" name="date_modification"/>
+        </property>
+        <set fetch="select" inverse="true" lazy="true" name="imagesAvises" table="images_avis">
+            <key>
+                <column name="id_avis"/>
+            </key>
+            <one-to-many class="ImagesAvis"/>
+        </set>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated 12 oct. 2025, 13:05:11 by Hibernate Tools 6.5.1.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="PiecesJointesMessages" optimistic-lock="none" schema="public" table="pieces_jointes_messages">
+        <id name="idPieceJointe" type="int">
+            <column name="id_piece_jointe"/>
+            <generator class="assigned"/>
+        </id>
+        <many-to-one class="Messages" fetch="select" name="messages">
+            <column name="id_message"/>
+        </many-to-one>
+        <property name="nomFichier" type="string">
+            <column length="255" name="nom_fichier"/>
+        </property>
+        <property name="cheminFichier" type="string">
+            <column length="500" name="chemin_fichier"/>
+        </property>
+        <property name="typeFichier" type="string">
+            <column length="100" name="type_fichier"/>
+        </property>
+        <property name="tailleFichier" type="java.lang.Integer">
+            <column name="taille_fichier"/>
+        </property>
+        <property name="dateUpload" type="timestamp">
+            <column length="29" name="date_upload"/>
+        </property>
+    </class>
+</hibernate-mapping>

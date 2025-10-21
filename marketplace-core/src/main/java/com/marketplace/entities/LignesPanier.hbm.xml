@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated 12 oct. 2025, 13:05:11 by Hibernate Tools 6.5.1.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="LignesPanier" optimistic-lock="none" schema="public" table="lignes_panier">
+        <id name="idLignePanier" type="int">
+            <column name="id_ligne_panier"/>
+            <generator class="assigned"/>
+        </id>
+        <many-to-one class="Produits" fetch="select" name="produits">
+            <column name="id_produit"/>
+        </many-to-one>
+        <many-to-one class="Paniers" fetch="select" name="paniers">
+            <column name="id_panier"/>
+        </many-to-one>
+        <many-to-one class="VariantesProduits" fetch="select" name="variantesProduits">
+            <column name="id_variante"/>
+        </many-to-one>
+        <property name="quantite" type="int">
+            <column name="quantite" not-null="true"/>
+        </property>
+        <property name="prixUnitaire" type="big_decimal">
+            <column name="prix_unitaire" not-null="true" precision="10" scale="2"/>
+        </property>
+        <property name="dateAjout" type="timestamp">
+            <column length="29" name="date_ajout"/>
+        </property>
+    </class>
+</hibernate-mapping>

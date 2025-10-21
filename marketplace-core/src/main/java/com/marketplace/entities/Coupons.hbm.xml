@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated 12 oct. 2025, 13:05:11 by Hibernate Tools 6.5.1.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="Coupons" optimistic-lock="none" schema="public" table="coupons">
+        <id name="idCoupon" type="int">
+            <column name="id_coupon"/>
+            <generator class="assigned"/>
+        </id>
+        <many-to-one class="Boutiques" fetch="select" name="boutiques">
+            <column name="id_boutique"/>
+        </many-to-one>
+        <property name="codeCoupon" type="string">
+            <column length="50" name="code_coupon" not-null="true" unique="true"/>
+        </property>
+        <property name="typeReduction" type="string">
+            <column length="20" name="type_reduction" not-null="true"/>
+        </property>
+        <property name="valeurReduction" type="big_decimal">
+            <column name="valeur_reduction" not-null="true" precision="10" scale="2"/>
+        </property>
+        <property name="montantMinimum" type="big_decimal">
+            <column name="montant_minimum" precision="10" scale="2"/>
+        </property>
+        <property name="montantMaximumReduction" type="big_decimal">
+            <column name="montant_maximum_reduction" precision="10" scale="2"/>
+        </property>
+        <property name="nombreUtilisationsMax" type="java.lang.Integer">
+            <column name="nombre_utilisations_max"/>
+        </property>
+        <property name="nombreUtilisationsActuel" type="java.lang.Integer">
+            <column name="nombre_utilisations_actuel"/>
+        </property>
+        <property name="nombreUtilisationsParClient" type="java.lang.Integer">
+            <column name="nombre_utilisations_par_client"/>
+        </property>
+        <property name="estActif" type="java.lang.Boolean">
+            <column name="est_actif"/>
+        </property>
+        <property name="estPublic" type="java.lang.Boolean">
+            <column name="est_public"/>
+        </property>
+        <property name="dateDebut" type="timestamp">
+            <column length="29" name="date_debut" not-null="true"/>
+        </property>
+        <property name="dateFin" type="timestamp">
+            <column length="29" name="date_fin" not-null="true"/>
+        </property>
+        <property name="dateCreation" type="timestamp">
+            <column length="29" name="date_creation"/>
+        </property>
+        <set fetch="select" inverse="true" lazy="true" name="utilisationsCouponses" table="utilisations_coupons">
+            <key>
+                <column name="id_coupon"/>
+            </key>
+            <one-to-many class="UtilisationsCoupons"/>
+        </set>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated 12 oct. 2025, 13:05:11 by Hibernate Tools 6.5.1.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="CategoriesBoutiques" optimistic-lock="none" schema="public" table="categories_boutiques">
+        <id name="idCategorieBoutique" type="int">
+            <column name="id_categorie_boutique"/>
+            <generator class="assigned"/>
+        </id>
+        <property name="nomCategorie" type="string">
+            <column length="100" name="nom_categorie" not-null="true"/>
+        </property>
+        <property name="description" type="string">
+            <column name="description"/>
+        </property>
+        <property name="icone" type="string">
+            <column length="255" name="icone"/>
+        </property>
+        <property name="dateCreation" type="timestamp">
+            <column length="29" name="date_creation"/>
+        </property>
+        <set fetch="select" inverse="true" lazy="true" name="boutiqueses" table="boutique_categories">
+            <key>
+                <column name="id_categorie_boutique" not-null="true"/>
+            </key>
+            <many-to-many entity-name="Boutiques">
+                <column name="id_boutique" not-null="true"/>
+            </many-to-many>
+        </set>
+    </class>
+</hibernate-mapping>

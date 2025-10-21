@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated 12 oct. 2025, 13:05:11 by Hibernate Tools 6.5.1.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="Notifications" optimistic-lock="none" schema="public" table="notifications">
+        <id name="idNotification" type="int">
+            <column name="id_notification"/>
+            <generator class="assigned"/>
+        </id>
+        <many-to-one class="Utilisateurs" fetch="select" name="utilisateurs">
+            <column name="id_utilisateur"/>
+        </many-to-one>
+        <property name="typeNotification" type="string">
+            <column length="100" name="type_notification" not-null="true"/>
+        </property>
+        <property name="titre" type="string">
+            <column length="255" name="titre" not-null="true"/>
+        </property>
+        <property name="message" type="string">
+            <column name="message" not-null="true"/>
+        </property>
+        <property name="lien" type="string">
+            <column length="500" name="lien"/>
+        </property>
+        <property name="estLu" type="java.lang.Boolean">
+            <column name="est_lu"/>
+        </property>
+        <property name="estArchive" type="java.lang.Boolean">
+            <column name="est_archive"/>
+        </property>
+        <property name="dateCreation" type="timestamp">
+            <column length="29" name="date_creation"/>
+        </property>
+        <property name="dateLecture" type="timestamp">
+            <column length="29" name="date_lecture"/>
+        </property>
+    </class>
+</hibernate-mapping>

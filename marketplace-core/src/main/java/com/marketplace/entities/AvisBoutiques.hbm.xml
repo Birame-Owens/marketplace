@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated 12 oct. 2025, 13:05:11 by Hibernate Tools 6.5.1.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="AvisBoutiques" optimistic-lock="none" schema="public" table="avis_boutiques">
+        <id name="idAvisBoutique" type="int">
+            <column name="id_avis_boutique"/>
+            <generator class="assigned"/>
+        </id>
+        <many-to-one class="Utilisateurs" fetch="select" name="utilisateurs">
+            <column name="id_utilisateur"/>
+        </many-to-one>
+        <many-to-one class="Boutiques" fetch="select" name="boutiques">
+            <column name="id_boutique"/>
+        </many-to-one>
+        <many-to-one class="Commandes" fetch="select" name="commandes">
+            <column name="id_commande"/>
+        </many-to-one>
+        <property name="noteProduits" type="java.lang.Integer">
+            <column name="note_produits"/>
+        </property>
+        <property name="noteCommunication" type="java.lang.Integer">
+            <column name="note_communication"/>
+        </property>
+        <property name="noteLivraison" type="java.lang.Integer">
+            <column name="note_livraison"/>
+        </property>
+        <property name="noteGlobale" type="big_decimal">
+            <column name="note_globale" precision="3" scale="2"/>
+        </property>
+        <property name="commentaire" type="string">
+            <column name="commentaire"/>
+        </property>
+        <property name="estVerifie" type="java.lang.Boolean">
+            <column name="est_verifie"/>
+        </property>
+        <property name="estPublie" type="java.lang.Boolean">
+            <column name="est_publie"/>
+        </property>
+        <property name="dateCreation" type="timestamp">
+            <column length="29" name="date_creation"/>
+        </property>
+    </class>
+</hibernate-mapping>

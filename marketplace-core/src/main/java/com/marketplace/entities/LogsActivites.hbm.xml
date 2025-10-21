@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated 12 oct. 2025, 13:05:11 by Hibernate Tools 6.5.1.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="LogsActivites" optimistic-lock="none" schema="public" table="logs_activites">
+        <id name="idLog" type="int">
+            <column name="id_log"/>
+            <generator class="assigned"/>
+        </id>
+        <many-to-one class="Utilisateurs" fetch="select" name="utilisateurs">
+            <column name="id_utilisateur"/>
+        </many-to-one>
+        <property name="typeAction" type="string">
+            <column length="100" name="type_action" not-null="true"/>
+        </property>
+        <property name="entiteCible" type="string">
+            <column length="100" name="entite_cible"/>
+        </property>
+        <property name="idEntite" type="java.lang.Integer">
+            <column name="id_entite"/>
+        </property>
+        <property name="description" type="string">
+            <column name="description"/>
+        </property>
+        <property name="adresseIp" type="string">
+            <column length="50" name="adresse_ip"/>
+        </property>
+        <property name="userAgent" type="string">
+            <column name="user_agent"/>
+        </property>
+        <property name="dateAction" type="timestamp">
+            <column length="29" name="date_action"/>
+        </property>
+    </class>
+</hibernate-mapping>

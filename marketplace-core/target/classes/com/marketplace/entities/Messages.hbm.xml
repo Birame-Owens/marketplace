@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated 12 oct. 2025, 13:05:11 by Hibernate Tools 6.5.1.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="Messages" optimistic-lock="none" schema="public" table="messages">
+        <id name="idMessage" type="int">
+            <column name="id_message"/>
+            <generator class="assigned"/>
+        </id>
+        <many-to-one class="Utilisateurs" fetch="select" name="utilisateurs">
+            <column name="id_expediteur"/>
+        </many-to-one>
+        <many-to-one class="Conversations" fetch="select" name="conversations">
+            <column name="id_conversation"/>
+        </many-to-one>
+        <property name="contenu" type="string">
+            <column name="contenu" not-null="true"/>
+        </property>
+        <property name="estLu" type="java.lang.Boolean">
+            <column name="est_lu"/>
+        </property>
+        <property name="dateLecture" type="timestamp">
+            <column length="29" name="date_lecture"/>
+        </property>
+        <property name="dateEnvoi" type="timestamp">
+            <column length="29" name="date_envoi"/>
+        </property>
+        <set fetch="select" inverse="true" lazy="true" name="piecesJointesMessageses" table="pieces_jointes_messages">
+            <key>
+                <column name="id_message"/>
+            </key>
+            <one-to-many class="PiecesJointesMessages"/>
+        </set>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated 12 oct. 2025, 13:05:11 by Hibernate Tools 6.5.1.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="StatistiquesBoutiques" optimistic-lock="none" schema="public" table="statistiques_boutiques">
+        <id name="idStatistique" type="int">
+            <column name="id_statistique"/>
+            <generator class="assigned"/>
+        </id>
+        <many-to-one class="Boutiques" fetch="select" name="boutiques">
+            <column name="id_boutique"/>
+        </many-to-one>
+        <property name="dateStatistique" type="date">
+            <column length="13" name="date_statistique" not-null="true"/>
+        </property>
+        <property name="nombreCommandes" type="java.lang.Integer">
+            <column name="nombre_commandes"/>
+        </property>
+        <property name="chiffreAffaires" type="big_decimal">
+            <column name="chiffre_affaires" precision="10" scale="2"/>
+        </property>
+        <property name="montantCommissions" type="big_decimal">
+            <column name="montant_commissions" precision="10" scale="2"/>
+        </property>
+        <property name="nombreProduitsVendus" type="java.lang.Integer">
+            <column name="nombre_produits_vendus"/>
+        </property>
+        <property name="nombreVuesProduits" type="java.lang.Integer">
+            <column name="nombre_vues_produits"/>
+        </property>
+        <property name="nombreNouveauxClients" type="java.lang.Integer">
+            <column name="nombre_nouveaux_clients"/>
+        </property>
+        <property name="nombreClientsRecurrents" type="java.lang.Integer">
+            <column name="nombre_clients_recurrents"/>
+        </property>
+        <property name="tauxConversion" type="big_decimal">
+            <column name="taux_conversion" precision="5" scale="2"/>
+        </property>
+        <property name="panierMoyen" type="big_decimal">
+            <column name="panier_moyen" precision="10" scale="2"/>
+        </property>
+        <property name="dateCreation" type="timestamp">
+            <column length="29" name="date_creation"/>
+        </property>
+    </class>
+</hibernate-mapping>
